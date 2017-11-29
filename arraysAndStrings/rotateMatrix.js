@@ -46,6 +46,5 @@
   [15, 11, 7, 3]]
 */
 const rotateMatrix = () => {
-
+	// TODO: write pseudocode for rotateMatrix
 };
-
