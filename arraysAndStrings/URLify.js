@@ -16,6 +16,7 @@ const replaceSpaces = (str) => {
 // Since strings are not mutable in JS, I'm not sure how this works.  It might have to create copies of the string everytime a char is replaced
 // I still think this would be linear time because we would drop the coefficient (number of time we iterate through str)
 
+// tests
 const assertEquals = (actual, expected, testname) => {
 	if (actual === expected) {
 		console.log(`passed ${testname}`);
