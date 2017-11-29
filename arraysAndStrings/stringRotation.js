@@ -39,6 +39,7 @@ const assertEquals = (actual, expected, testname) => {
 	}
 };
 
+// tests
 console.log('TESTS FOR: isSubstring()');
 assertEquals(isSubstring('waterbottle', 'bottle'), true, 'should return true if s2 is substring of s1');
 assertEquals(isSubstring('waterbottle', 'terbots'), false, 'should return false if s2 is not substring of s1');
