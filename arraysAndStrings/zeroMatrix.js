@@ -30,6 +30,10 @@ const zeroMatrix = (matrix) => {
 	return matrix;
 };
 
+// time complexity: O(n^2)
+// space complexity: O(n)
+
+// tests
 const assertMatrixEquals = (actual, expected, testname) => {
   actual = JSON.stringify(actual);
   expected = JSON.stringify(expected);
