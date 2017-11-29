@@ -36,6 +36,7 @@ const isPermutation = (str1, str2) => {
 // time complexity: O(nm) where n and m are the lengths of the two strings
 // space complexity: O(nm) where n and m are the lengths of the two strings
 
+// tests
 const assertEquals = (actual, expected, testName) => {
   if (actual === expected) {
   	console.log(`passed ${testName}`);
