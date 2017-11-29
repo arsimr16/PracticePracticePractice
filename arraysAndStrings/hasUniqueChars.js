@@ -30,6 +30,7 @@ const assertEquals = (actual, expected, testName) => {
 	}
 };
 
+// tests for function without constraints
 assertEquals(hasUniqueChars('Alex'), true, 'should return true when all chars are unique');
 assertEquals(hasUniqueChars('Alexx'), false, 'should return false when all chars are not unique');
 assertEquals(hasUniqueChars('Alexa'), true, 'should treat capital and lowercase as separate letters');
@@ -50,6 +51,7 @@ const hasUniqueChars1DS = (str) => {
 // time complexity O(n^2)
 // space complexity O(1)
 
+// tests for function with constraints
 assertEquals(hasUniqueChars1DS('Alex'), true, 'should return true when all chars are unique');
 assertEquals(hasUniqueChars1DS('Alexx'), false, 'should return false when all chars are not unique');
 assertEquals(hasUniqueChars1DS('Alexa'), true, 'should treat capital and lowercase as separate letters');
