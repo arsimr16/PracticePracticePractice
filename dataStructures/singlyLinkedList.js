@@ -45,10 +45,10 @@ LinkedList.prototype.removeHead = () => {
 	return prevHead.value;
 };
 
-LinkedList.prototype.contains = (value) => {
+LinkedList.prototype.contains = (target) => {
 	let current = this.head;
 	while(current) {
-		if (current.value === value) {
+		if (current.value === target) {
 			return true;
 		}
 		current = current.next;
@@ -72,9 +72,9 @@ LinkedList.prototype.addToHead = (value) => {
 	this.head = newHead;
 };
 
-LinkedList.prototype.remove = (value) => {
+LinkedList.prototype.remove = (target) => {
 	// if the head === value, use removeHead method
-	if (this.head.value === value) {
+	if (this.head.value === target) {
 		return this.removeHead();
 	}
 	// iterate through linked list
@@ -82,7 +82,7 @@ LinkedList.prototype.remove = (value) => {
 	// while the current and next values exist
 	while(curr && curr.next) {
 		// if the next value === value, remove the node
-		if (curr.next.value === value) {
+		if (curr.next.value === target) {
 			// if the node being removed has a node after it
 			if (curr.next.next) {
 				// update the pointer of the current node
@@ -94,7 +94,7 @@ LinkedList.prototype.remove = (value) => {
 				this.tail = curr;
 			}
 			// return the value that was removed
-			return value;
+			return target;
 		}
 		// move to the next node in the LinkedList
 		curr = curr.next
@@ -126,100 +126,34 @@ LinkedList.prototype.map = (cb) => {
 	return result;
 };
 
-LinkedList.prototype.inserAfter = (target, value) => {
-
+LinkedList.prototype.insertAfter = (target, value) => {
+	let curr = this.head;
+	const newNode = this.makeNode(value);
+	while(curr) {
+		// if curr value === target, insert newNode
+		if (curr.value === target) {
+			// add pointer to following node
+			newNode.next = curr.next;
+			// update pointer of current node
+			curr.next = newNode;
+			// return value inserted
+			return value;
+		}
+		curr = curr.next;
+	}
+	// if target is not found, return null
+	return null
 };
 
 LinkedList.prototype.insertBefore = (target, value) => {
+	let curr = this.head;
 
 };
 
 
+// TODO add time and space complexities for all methods
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// attempt 1
-
-
-// singly linked list
-
-
-// add to front
-LinkedList.prototype.addToFront = (value) => {
-	const newNode = new Node(value);
-	if (!this.start) {
-		this.start = newNode;
-		this.end = newNode;
-	} else {
-		newNode.next = this.start;
-		this.start = newNode;
-	}
-};
-
-// add to somewhere in middle
-LinkedList.prototype.insertAfter = (value, insertAfterValue) => {
-	let curr = this.start;
-	while(curr) {
-		if (curr.value === insertAfterValue) {
-			const temp = curr.next;
-			curr.next = new Node(value);
-			curr.next.next = temp;
-		}
-		curr = curr.next;
-		return;
-	}
-	return -1;
-};
-
-// remove
-LinkedList.prototype.remove = (value) => {
-	let curr = this.start
-	let removed;
-	if (curr === this.end && curr.value = value) {
-		removed = this.start;
-		this.start === null;
-		this.end === null;
-		return removed;
-	}
-	while(curr) {
-		if (curr.value === value) {
-			removed = curr.next;
-			curr.next = new Node(value);
-			curr.next.next = removed.next;
-			return removed;
-		}
-		curr = curr.next;
-	}
-	return -1;
-}
-
-// map (forEach)
-LinkedList.prototype.map = (cb) => {
-	let curr = this.start;
-	while(curr) {
-		curr.value = cb(curr.value);
-		curr = curr.next;
-	}
-}
+// TODO implement tests for all methods
 
 const assertEquals = (actual, expected, testName) => {
 	if (actual === expected) {
@@ -234,13 +168,6 @@ const assertEquals = (actual, expected, testName) => {
 // tests for addToBack()
 // 'should add to back when list is empty' (check that start and end are same, value is correct)
 // 'should add to back when list is not empty' (check that start and end are not same, end value is correct)
-
-const testList0 = new LinkedList();
-testList0.addToBack(1);
-
-assertEquals(testList0.contains(1), true, 'should add to back when list is empty');
-
-assertEquals(testList0.remove())
 
 // tests for addToFront()
 // 'should add to front when list is empty' (check that start and end are same, value is correct)
