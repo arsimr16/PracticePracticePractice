@@ -56,7 +56,9 @@ LinkedList.prototype.contains = (target) => {
 	return false;
 };
 
-// more methods - addToHead, insertAfter, insertBefore, remove, forEach, map
+
+// More methods - addToHead, insertAfter, insertBefore, remove, forEach, map
+
 
 LinkedList.prototype.addToHead = (value) => {
 	const newHead = this.makeNode(value);
@@ -184,27 +186,46 @@ const assertEquals = (actual, expected, testName) => {
 	}
 }
 
-// TESTS
+// TESTS:
 
-// tests for addToBack()
-// 'should add to back when list is empty' (check that start and end are same, value is correct)
-// 'should add to back when list is not empty' (check that start and end are not same, end value is correct)
+// tests for addToTail()
+// 'should add to tail when list is empty' (check that start and end are same, value is correct)
+// 'should add to tail when list is not empty' (check that start and end are not same, end value is correct)
 
-// tests for addToFront()
-// 'should add to front when list is empty' (check that start and end are same, value is correct)
-// 'should add to front when list is not empty' (check that start and end are not same, start value is correct)
+// tests for makeNode()
+// 'this.value should equal passed in value'
+// 'this.next should equal null'
+
+// tests for removeHead()
+// 'should remove head if head exisits'
+// 'should also remove tail if list only had one item'
+// 'should not remove head if head does not exist'
+
+// tests for contains()
+// 'should return true if linked list contains value'
+// 'should return false if linked list does not contain value'
+
+// tests for addToHead()
+// 'should add to head when list is empty' (check that head and tail are same, value is correct)
+// 'should add to head when list is not empty' (check that head and tail are not same, head value is correct)
 
 // tests for insertAfter()
 // 'should insert new node after specified target'
+// 'should not insert value if target is not found'
+
+// tests for insertBefore()
+// 'should insert new node before specified target'
 // 'should not insert value if target is not found'
 
 // tests for remove()
 // 'should remove value if list contains value' 
 // 'should not remove anything is value is not found' (compare lengths of before and after?)
 
-// tests for contains()
-// 'should return true if linked list contains value'
-// 'should return false if linked list does not contain value'
+// tests for forEach() 
+// 'should invoke the callback on each item in the LinkedList'
+// 'should not return anything'
 
 // tests for map()
-// 'should invoke callback on each value in the linked list'
+// 'should invoke callback on each item in the LinkedList'
+// 'should return new LinkedList with values being results of invoking cb on original values'
+// 'should not mutate original LinkedList'
