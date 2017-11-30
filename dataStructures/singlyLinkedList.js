@@ -127,8 +127,8 @@ LinkedList.prototype.map = (cb) => {
 };
 
 LinkedList.prototype.insertAfter = (target, value) => {
-	let curr = this.head;
 	const newNode = this.makeNode(value);
+	let curr = this.head;
 	while(curr) {
 		// if curr value === target, insert newNode
 		if (curr.value === target) {
@@ -146,8 +146,29 @@ LinkedList.prototype.insertAfter = (target, value) => {
 };
 
 LinkedList.prototype.insertBefore = (target, value) => {
-	let curr = this.head;
-
+	const newNode = this.makeNode(value);
+	// if head === target, invoke addToHead
+	if (this.head === target) {
+		return this.addToHead(value);
+	}
+	let prev = this.head;
+	let curr = this.head.next;
+	while(curr) {
+		// if the current value === target, insert between prev and curr
+		// I could invoke insertAfter(prev.value, value), but this would require iterating through the list again
+		// If I rewrite the logic of insertAfter, the code will not be as easy to read, but it will be faster
+		if (curr.value === target) {
+			// add pointer to curr node
+			newNode.next = curr;
+			// add pointer to prev node
+			prev.next = newNode;
+			// return value inserted
+			return value;
+		}
+		curr = curr.next;
+	}
+	// if target is not found, return null
+	return null;
 };
 
 
