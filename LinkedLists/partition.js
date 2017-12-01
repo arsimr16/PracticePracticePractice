@@ -14,7 +14,7 @@ class LinkedList {
 	}
 
 	makeNode(value) {
-		return { value, next: null };
+		return { value, prev: null, next: null };
 	}
 
 	addToTail(value) {
@@ -23,20 +23,55 @@ class LinkedList {
 			this.head = newTail;
 		}
 		if (this.tail) {
+			newTail.prev = this.tail;
 			this.tail.next = newTail;
 		}
 		this.tail = newTail;
 	}
 
-	// I: a partition value
-	// O: the linked list ordered such that all values less than the partition value are to the left of that value
-	// C: none
-	// E: if the partition value is less than or greater than all items in the list, the list should not change
-	partition(x) {
+	// contains(target) {
+	// 	let curr = this.head;
+	// 	while(curr) {
+	// 		if (curr.value === target) {
+	// 			return true;
+	// 		}
+	// 		curr = curr.next;
+	// 	}
+	// 	return false;
+	// }
 
+	moveToHead(node) {
+		// update previous' next pointer to next
+		node.prev.next = node.next;
+		// update next's prev pointer to previous
+		node.next.prev = node.prev;
+		let oldHead = this.head;
+		// update node's next pointer to old head
+		node.next = oldHead;
+		// update old head's prev pointer to new head
+		oldHead.prev = node;
+		// update LinkedList's head pointer to the new head
+		this.head = node;
+	}
+
+	// I: a partition value
+	// O: no direct return value the linked list ordered such that 
+	// all values less than the partition value are to the left of that value
+	// C: none
+	// E: if the partition value is less than or greater than all items in the list,
+	// the list should not change
+	partition(x) {
+		// start with the second element because the first will never have to move
+		let curr = this.head.next;
+		while(curr) {
+			if (curr.value < x) {
+				this.moveToHead(curr);
+			}
+			curr = curr.next;
+		}
 	} 
-	// time complexity:
-	// space complexity:
+	// time complexity: O(n)
+	// space complexity: O(1)
 }
 
 // tests
