@@ -25,19 +25,6 @@ LinkedList.prototype.addToTail = (value) => {
 	this.tail = newTail;
 ;
 
-LinkedList.prototype.removeHead = () => {
-	const prevHead = this.head;
-	if (!prevHead) {
-		return null;
-	}
-	if (this.head === this.tail) {
-		this.head = this.tail = null;
-	} else {
-		this.head = this.head.next;
-	}
-	return prevHead.value;
-};
-
 LinkedList.prototype.contains = (target) => {
 	let curr = this.head;
 	while(curr) {
@@ -59,7 +46,13 @@ LinkedList.prototype.removeDups = () => {
 		// if the next value is not unique
 		if (uniq[curr.next.value]) {
 			// remove pointer to curr.next / update pointer of current
-			curr.next = curr.next.next
+			if (curr.next.next) {
+				curr.next = curr.next.next
+			} else {
+				// if tail is removed, update this.tail
+				curr.next = null;
+				this.tail = curr;
+			}
 		} else {
 			uniq[curr.next.value] = true;
 			curr = curr.next;
