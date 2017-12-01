@@ -51,11 +51,26 @@ LinkedList.prototype.contains = (target) => {
 
 
 LinkedList.prototype.removeDups = () => {
-
+	const uniq = {};
+	// the head is always unique
+	uniq[this.head.value] = true;
+	let curr = this.head;
+	while(curr && curr.next) {
+		// if the next value is not unique
+		if (uniq[curr.next.value]) {
+			// remove pointer to curr.next / update pointer of current
+			curr.next = curr.next.next
+		} else {
+			uniq[curr.next.value] = true;
+			curr = curr.next;
+		}
+	}
+	// return the linked list without any duplicates
+	return this;
 };
 
-// time complexity:
-// space complexity:
+// time complexity: O(n)
+// space complexity: O(n)
 
 // tests:
 
