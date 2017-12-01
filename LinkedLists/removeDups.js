@@ -1,69 +1,77 @@
 // write code to remove duplicates from an unsorted linked list
 // how would you solve this problem if a temporary buffer is not allowed?
 
-// basic LinkedList implementation
-const LinkedList = () => {
-	this.head = null;
-	this.tail = null;
-};
-
-LinkedList.prototype.makeNode = (value) => {
-	const node = {};
-	node.value = value;
-	node.next = null;
-	return node;
-};
-
-LinkedList.prototype.addToTail = (value) => {
-	const newTail = this.makeNode(value);
-	if (!this.head) {
-		this.head = newTail;
+class LinkedList {
+	constructor() {
+		this.head = null;
+		this.tail = null;
 	}
-	if (this.tail) {
-		this.tail.next = newTail;
-	}
-	this.tail = newTail;
-;
 
-LinkedList.prototype.contains = (target) => {
-	let curr = this.head;
-	while(curr) {
-		if (curr.value === target) {
-			return true;
+	makeNode(value) {
+		return { value, next: null }
+	}
+
+	addToTail(value) {
+		const newTail = this.makeNode(value);
+		if (!this.head) {
+			this.head = newTail;
 		}
-		curr = curr.next;
+		if (this.tail) {
+			this.tail.next = newTail;
+		}
+		this.tail = newTail;
 	}
-	return false;
-};
 
-
-LinkedList.prototype.removeDups = () => {
-	const uniq = {};
-	// the head is always unique
-	uniq[this.head.value] = true;
-	let curr = this.head;
-	while(curr && curr.next) {
-		// if the next value is not unique
-		if (uniq[curr.next.value]) {
-			// remove pointer to curr.next / update pointer of current
-			if (curr.next.next) {
-				curr.next = curr.next.next
-			} else {
-				// if tail is removed, update this.tail
-				curr.next = null;
-				this.tail = curr;
-			}
-		} else {
-			uniq[curr.next.value] = true;
+	map(cb) {
+		const result = new LinkedList();
+		let curr = this.head;
+		while(curr) {
+			result.addToTail(cb(curr.value));
 			curr = curr.next;
 		}
+		return result;
 	}
-	// return the linked list without any duplicates
-	return this;
-};
+
+	removeDups() {
+		let curr = this.head;
+		let uniq = {};
+		uniq[this.head.value] = true;
+		while(curr && curr.next) {
+			// if next value is not unique
+			if (uniq[curr.next.value]) {
+				// if removed value is tail, update pointer to tail
+				if (!curr.next.next) {
+					this.tail = curr;
+				}
+				curr.next = curr.next.next;
+			} else {
+				uniq[curr.next.value] = true;
+				curr = curr.next;
+			}
+		}
+	}
+}
 
 // time complexity: O(n)
 // space complexity: O(n)
 
 // tests:
+// const assertEquals = (actual, expected, testname) => {
+// 	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+// 		console.log(`passed ${testname}`);
+// 	} else {
+// 		console.log(`FAILED ${testname}: expected "${expected}", but got ""${actual}`);
+// 	}
+// };
+// // 
+// let listWithDups = new LinkedList();
+// listWithDups.addToTail(0);
+// listWithDups.addToTail(1);
+// listWithDups.addToTail(2);
+// listWithDups.addToTail(1);
+// listWithDups.addToTail(0);
 
+// const listWithoutDups = listWithDups.removeDups();
+// const result = listWithoutDups.map((item) => item);
+
+// assertEquals(result, [0, 1, 2], 'should remove duplicates from LinkedList');
