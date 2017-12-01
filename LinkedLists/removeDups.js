@@ -22,14 +22,13 @@ class LinkedList {
 		this.tail = newTail;
 	}
 
-	map(cb) {
-		const result = new LinkedList();
+	forEach(cb) {
 		let curr = this.head;
 		while(curr) {
-			result.addToTail(cb(curr.value));
+			// call the callback function on each item in the LinkedList
+			curr.value = cb(curr.value);
 			curr = curr.next;
 		}
-		return result;
 	}
 
 	removeDups() {
@@ -55,23 +54,43 @@ class LinkedList {
 // time complexity: O(n)
 // space complexity: O(n)
 
-// tests:
-// const assertEquals = (actual, expected, testname) => {
-// 	if (JSON.stringify(actual) === JSON.stringify(expected)) {
-// 		console.log(`passed ${testname}`);
-// 	} else {
-// 		console.log(`FAILED ${testname}: expected "${expected}", but got ""${actual}`);
-// 	}
-// };
-// // 
-// let listWithDups = new LinkedList();
-// listWithDups.addToTail(0);
-// listWithDups.addToTail(1);
-// listWithDups.addToTail(2);
-// listWithDups.addToTail(1);
-// listWithDups.addToTail(0);
 
-// const listWithoutDups = listWithDups.removeDups();
-// const result = listWithoutDups.map((item) => item);
+// tests
 
-// assertEquals(result, [0, 1, 2], 'should remove duplicates from LinkedList');
+const assertEquals = (actual, expected, testname) => {
+	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+		console.log(`passed ${testname}`);
+	} else {
+		console.log(`FAILED ${testname}: expected "${expected}", but got ""${actual}`);
+	}
+};
+
+let listWithDups = new LinkedList();
+listWithDups.addToTail(0);
+listWithDups.addToTail(1);
+listWithDups.addToTail(2);
+listWithDups.addToTail(1);
+listWithDups.addToTail(0);
+
+listWithDups.removeDups();
+
+const output1 = [];
+listWithDups.forEach((node) => {
+	output1.push(node);
+});
+
+assertEquals(output1, [0, 1, 2], 'should remove duplicates from LinkedList');
+
+const listWithoutDups = new LinkedList();
+listWithoutDups.addToTail(0);
+listWithoutDups.addToTail(2);
+listWithoutDups.addToTail(4);
+
+listWithoutDups.removeDups();
+
+const output2 = [];
+listWithoutDups.forEach((node) => {
+	output2.push(node);
+});
+
+assertEquals(output2, [0, 2, 4], 'should not remove anything from LinkedList without duplicates');
