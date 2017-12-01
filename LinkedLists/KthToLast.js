@@ -27,14 +27,20 @@ class LinkedList {
 	// E: when k = 0, return last element, when k = 1, return 1 from end, etc.
 	// if k >= list length, return null
 	kthToLast(k) {
-
+		const elements = [];
+		let curr = this.head;
+		while(curr) {
+			elements.push(curr.value);
+			curr = curr.next;
+		}
+		return k >= elements.length ? null : elements[elements.length - k - 1];
 	}
-	// time complexity: 
-	// space complexity: 
+	// time complexity: O(n)
+	// space complexity: O(n)
 }
 
 // tests
-const assertEquals = (actual, expected, testname) {
+const assertEquals = (actual, expected, testname) => {
 	if (actual === expected) {
 		console.log(`passed "${testname}"`);
 	} else {
@@ -53,4 +59,3 @@ assertEquals(list.kthToLast(1), 2, 'should return the penultimate item when k = 
 assertEquals(list.kthToLast(2), 1, 'should return the antepenultimate item when k = 3');
 assertEquals(list.kthToLast(3), 0, 'should return the first item when k = list length - 1');
 assertEquals(list.kthToLast(4), null, 'should return null when k >= list length');
-
