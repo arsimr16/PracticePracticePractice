@@ -39,10 +39,24 @@ class LinkedList {
 	// C: only given access to target node (i.e. not previous and next)
 	// E: value not in linked list do nothing, value not in middle do nothing, assume all values are unique
 	deleteFromMiddle(target) {
-
+		if (this.head.value !== target && this.tail.value !== target) {
+			let curr = this.head;
+			while(curr && curr.next) {
+				// if the next value equals the target
+				if (curr.next.value === target) {
+					// update pointer to value after removed element
+					// based on the first if condition and the assumption that all values are unique
+					// this cannot be the tail (pointing to a null value)
+					// we will never need to update the LinkedList's pointer to the tail
+					curr.next = curr.next.next;
+					return;
+				}
+				curr = curr.next;
+			}
+		}
 	}
-	// time complexity:
-	// space complexity:
+	// time complexity: O(n)
+	// space complexity: O(1)
 }
 
 // tests
