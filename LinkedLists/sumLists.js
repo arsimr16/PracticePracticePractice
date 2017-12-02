@@ -88,7 +88,8 @@ const assertDeepEquals = (actual, expected, testname) => {
 	}
 };
 
-// tests for sumListsReverse()
+console.log('TESTS FOR SUMLISTSREVERSE(): ')
+
 let list1 = new LinkedList();
 list1.addToTail(7);
 list1.addToTail(1);
@@ -127,4 +128,23 @@ reverseSum2.forEach(item => result2.push(item));
 
 assertDeepEquals(result2, [8, 9, 1], 'should carry remainder of highest place value');
 
-// tests for sumLists()
+console.log('');
+console.log('TESTS FOR SUMLISTS()');
+
+const sum0 = sumLists(list1, list2);
+const result3 = [];
+sum0.forEach(item => result.push(item));
+
+assertDeepEquals(result3, [1, 3, 0, 8], 'should return sum of digits in forward order');
+
+const sum1 = sumLists(list1, list3);
+const result4 = [];
+sum4.forEach(item => result4.push(item));
+
+assertDeepEquals(result4, [6, 6, 4, 4], 'shoudl return correct sum when lists are unequal in length');
+
+const sum2 = sumListsReverse(list4, list4);
+const result5 = [];
+sum2.forEach(item => result5.push(item));
+
+assertDeepEquals(result2, [1, 9, 8], 'should carry remainder of highest place value');
