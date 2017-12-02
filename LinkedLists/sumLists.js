@@ -32,7 +32,6 @@ class LinkedList {
 	forEach(cb) {
 		let curr = this.head;
 		while(curr) {
-			// call the callback function on each item in the LinkedList
 			cb(curr.value);
 			curr = curr.next;
 		}
@@ -65,8 +64,8 @@ const sumListsReverse = (l1, l2) => {
 	}
 	return result;
 }
-// time complexity:
-// space complexity:
+// time complexity: O(n) where n is length of longer list
+// space complexity: O(n) where n is length of sum
 
 
 // I: two linked lists, digits in forward order
@@ -74,7 +73,13 @@ const sumListsReverse = (l1, l2) => {
 // C: none
 // E: empty list, numbers have different lengths, assume only positive integers
 const sumLists = (l1, l2) => {
-	// sum lists with digits in forward order
+	// if I could use a doubly linked list, I could use the same logic from sumListsRevers iterating from tail to head
+	// without having a doubly linked list:
+	// check if lengths are equal
+		// if they aren't, pad shorter list with 0s at the head
+	// write logic to deal with remainders
+	// this would get pretty complicated.  
+	// It might be easier to convert the lists into numbers, add the numbers, and convert the sum into a linked list
 }
 // time complexity:
 // space complexity:
@@ -110,6 +115,8 @@ let list4 = new LinkedList();
 list4.addToTail(9);
 list4.addToTail(9);
 
+let list5 = new LinkedList();
+
 const reverseSum0 = sumListsReverse(list1, list2);
 const result0 = [];
 reverseSum0.forEach(item => result0.push(item));
@@ -143,8 +150,20 @@ sum4.forEach(item => result4.push(item));
 
 assertDeepEquals(result4, [6, 6, 4, 4], 'shoudl return correct sum when lists are unequal in length');
 
-const sum2 = sumListsReverse(list4, list4);
+const sum2 = sumLists(list4, list4);
 const result5 = [];
 sum2.forEach(item => result5.push(item));
 
 assertDeepEquals(result2, [1, 9, 8], 'should carry remainder of highest place value');
+
+const sum3 = sumLists(list4, list5);
+const result6 = [9, 9];
+sum3.forEach(item => result6.push(item));
+
+assertDeepEquals(result6, [1, 9, 8], 'should work when one list is empty');
+
+const sum4 = sumLists(list5, list5);
+const result7 = [9, 9];
+sum4.forEach(item => result7.push(item));
+
+assertDeepEquals(result7, [], 'should work when both lists is empty');
