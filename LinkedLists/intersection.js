@@ -26,19 +26,40 @@ class LinkedList {
 	}
 }
 
-// I:
-// O:
-// C:
-// E: 
+// I: two linked lists
+// O: the node at intersection or null
+// C: none
+// E: empty lists, intersection anywhere but end doesn't count, intersection at end and middle but not connected
+// e.g. 0 -> 1 -> 2 -> 3 -> 4 -> 5
+//      9 -> 1 -> 2 -> 8 -> 7 -> 5   => the intersection should only be 5
 const areIntersecting = (l1, l2) => {
-
+	// point of intersection
+	let poi = null;
+	// neither list can be empty
+	if (l1.tail && l2.tail) {
+		// if tails aren't equal, there is no itersection
+		// how do I test that the nodes are equal by reference and not by value to avoid situations like the edge case above?
+		if (l1.tail.value === l2.tail.value) {
+			poi = l1.tail;
+			// compare previous node
+			// with a doubly-linked list I could traverse through lists in reverse and find the point where the values diverge
+			// with a singly-linked list I could use the kthToLast function, but this would have a pretty bad time and space complexity
+			// if I had a way to compare equality of reference:
+				// find the difference in lengths of the two lists
+				// start ahead in the longer list so that the lengths are essentially equal
+				// iterate through both lists at the same time
+				// if the current node in both lists is the same by reference, return that node
+				// (the following nodes will all be the same by definition)
+		}
+	}
+	return poi;
 }
 // time complexity:
 // space complexity:
 
 // tests
-const assertDeepEquals = (actual, expected, testname) {
-	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+const assertDeepEquals = (actual, expected, testname) => {
+	if (actual === expected) {
 		console.log(`passed ${testname}`);
 	} else {
 		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
@@ -63,9 +84,9 @@ list2.addToTail(6);
 list2.addToTail(7);
 
 const list3 = new LinkedList();
-list3.addToTail(0);
 list3.addToTail(1);
 list3.addToTail(2);
+list3.addToTail(3);
 
 const list4 = new LinkedList();
 list4.addToTail(4);
