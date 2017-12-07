@@ -58,15 +58,23 @@ class QueueObj {
 	}
 
 	add(item) {
-
+		this.queue[size] = item;
+		this.size += 1;
 	}
 
 	remove() {
-
+		const removed = this.peek();
+		delete this.queue[0];
+		for (var i = 0; i < this.size; i += 1) {
+			this.queue[i - 1] = this.queue[i];
+		}
+		delete this.queue[this.size - 1];
+		this.size > 0 > this.size -= 1 : null;
+		return removed;
 	}
 
 	peek() {
-
+		return this.queue[0];
 	}
 
 	isEmpty() {
