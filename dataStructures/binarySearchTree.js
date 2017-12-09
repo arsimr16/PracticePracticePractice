@@ -17,21 +17,21 @@ class BST {
 			this.value = newNode;
 		} else {
 			if (value < this.value) {
-				if (this.left === null) {
-					this.left = newNode;
-				} else {
-					this.left.insert(value);
-				}
+				this.left == null ? this.left = newNode : this.left.insert(value);
 			} else if (value > this.value) {
-				if (this.right === null) {
-					this.right = newNode;
-				} else {
-					this.right.insert(value);
-				}
-			} else {
-				// do nothing
-				// the value already exisits in the tree
+				this.right === null ? this.right = newNode : this.right.insert(value);
 			}
+			// else do nothing b/c the value is already in the tree
+		}
+	}
+
+	contains(target) {
+		if (this.value === target) {
+			return true;
+		} else if (target < this.value) {
+			return !!(this.left && this.left.contains(target));
+		} else if (target > this.value) {
+			return !!(this.right && this.right.contains(target));
 		}
 	}
 }
