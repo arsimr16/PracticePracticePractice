@@ -1,4 +1,4 @@
-// implementation of binary search tree with depth-first and breadth-first traversal methods;
+// implementation of binary search tree with contains and depth-first traversal methods;
 
 class BST {
 	constructor() {
@@ -52,6 +52,7 @@ class BST {
 		return false;
 	}
 
+	// left, value, right
 	inOrder(cb, curr = this.root) {
     if (curr) {
       this.inOrder(cb, curr.left);
@@ -59,21 +60,35 @@ class BST {
       this.inOrder(cb, curr.right);
     }
   }
+
+  // value, left, right
+  preOrder(cb, curr = this.root) {
+  	if (curr) {
+  		cb(curr.value);
+  		this.preOrder(cb, curr.left);
+  		this.preOrder(cb, curr.right);
+  	}
+  }
+
+  // left, right, value
+  postOrder(cb, curr = this.root) {
+  	if (curr) {
+  		this.postOrder(cb, curr.left);
+  		this.postOrder(cb, curr.right);
+  		cb(curr.value) 
+  	}
+  }
 }
 
-const preOrderTraversal = (node, cb) => {
-	// value, left, right
-};
-
-const postOrderTraversal = (node, cb) => {
-	// left, right, value
-}
-
-const readthFirstTraversal = (node, cb) => {
-	// root, all direct children, all children of direct children, etc.
-}
 
 // tests
+const assertDeepEquals = (actual, expected, testname) => {
+	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+		console.log(`passed ${testname}`);
+	} else {
+		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
+	}
+}
 
 let testBST = new BST();
 testBST.insert(10);
@@ -86,10 +101,18 @@ testBST.insert(3);
 testBST.insert(15);
 testBST.insert(14);
 
-console.log(testBST);
-// inOrderTraversal(testBST, x => console.log(x));
+assertDeepEquals(testBST.contains(11), true, 'contains should return true when bst contains passed in target');
+assertDeepEquals(testBST.contains(13), false, 'contains should return false when bst does not contain passed in target');
 
-console.log(testBST.contains(11));
-console.log(testBST.contains(13));
+const valuesInOrder = [];
+testBST.inOrder(x => valuesInOrder.push(x));
+assertDeepEquals(valuesInOrder, [1, 3, 5, 8, 10, 11, 12, 14, 15], 'should traverse bst in order');
 
-testBST.inOrder(x => console.log(x));
+const valuesPreOrder = [];
+testBST.preOrder(x => valuesPreOrder.push(x));
+assertDeepEquals(valuesPreOrder, [10, 5, 1, 3, 8, 12, 11, 15, 14], 'should traverse bst in preOrder');
+
+const valuesPostOrder = [];
+testBST.postOrder(x => valuesPostOrder.push(x));
+assertDeepEquals(valuesPostOrder, [3, 1, 8, 5, 11, 14, 15, 12, 10], 'should traverse bst in postOrder');
+
