@@ -1,7 +1,7 @@
 // basic FIFO queue
 
 // implemented with doubly-linked list
-class QueueArr {
+class QueueList {
 	constructor() {
 		this.head = null;
 		this.tail = null;
