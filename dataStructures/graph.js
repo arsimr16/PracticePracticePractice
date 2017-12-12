@@ -7,7 +7,7 @@ class Queue {
 	}
 
 	makeNode(value) {
-		return { value, prev: null; next: null };
+		return { value, prev: null, next: null };
 	}
 
 	add(value) {
@@ -31,6 +31,17 @@ class Queue {
 			this.head.prev = null;
 			return removed;
 		}
+	}
+
+	contains(target) {
+		let curr = this.head;
+		while (curr) {
+			if (curr.value === target) {
+				return true;
+			}
+			curr = curr.next;
+		}
+		return false;
 	}
 
 	isEmpty() {
@@ -88,13 +99,29 @@ class Graph {
 	}
 
 	depthFirst() {
-
+		//TODO
 	}
 
-	breadthFirst(value) {
-		if (this.contains(value)) {
+	breadthFirst(node, cb) {
+		if (this.contains(node)) {
 			const visited = {};
 			const toVisit = new Queue();
+			toVisit.add(node);
+			while(!toVisit.isEmpty) {
+				let nextInQueue = toVisit.head;
+				// add direct neighbors that are not in queue or visited
+				this.nodes[node].edges.forEach(edge => {
+					if (!visited[edge] && !toVisit.contains(edge)) {
+						toVisit.add(edge);
+					}
+				})
+				// invoke callback on node
+				cb(nextInQueue);
+				// add node at front of queue to visited
+				visited[nextInQueue] = nextInQueue;
+				// remove node from queue
+				toVisit.remove();
+			}
 		}
 	}
 }
