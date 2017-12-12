@@ -1,4 +1,43 @@
 // graph implementation using JS objects to store edges and vertices
+class Queue {
+	constructor() {
+		this.head = null;
+		this.tail = null;
+		this.size = 0;
+	}
+
+	makeNode(value) {
+		return { value, prev: null; next: null };
+	}
+
+	add(value) {
+		const newNode = this.makeNode(value);
+		if (!this.head) {
+			this.head = newNode;
+		}
+		if (this.tail) {
+			newNode.prev = this.tail;
+			this.tail.next = newNode;
+		}
+		this.tail = newNode;
+		this.size += 1;
+	}
+
+	remove() {
+		if (!this.isEmpty) {
+			const removed = this.head;
+			this.size -= 1;
+			this.head = this.head.next;
+			this.head.prev = null;
+			return removed;
+		}
+	}
+
+	isEmpty() {
+		return this.size === 0;
+	}
+}
+
 class Graph {
 	constructor() {
 		this.nodes = {};
@@ -52,8 +91,11 @@ class Graph {
 
 	}
 
-	breadthFirst() {
-
+	breadthFirst(value) {
+		if (this.contains(value)) {
+			const visited = {};
+			const toVisit = new Queue();
+		}
 	}
 }
 
