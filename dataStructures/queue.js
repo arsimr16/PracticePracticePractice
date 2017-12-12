@@ -9,7 +9,6 @@ class QueueList {
 	}
 
 	makeNode(value) {
-		this.size += 1;
 		return { value, prev: null, next: null };
 	}
 
@@ -24,19 +23,18 @@ class QueueList {
 			this.tail.next = newTail;
 		}
 		this.tail = newTail;
+		this.size += 1;
 	}
 
 	// remove item from front of queue
 	remove() {
-		const removed = this.peek();
-		if (this.size === 0) {
+		if (!this.isEmpty) {
+			const removed = this.peek();
+			this.size -= 1;
+			this.head = this.head.next;
+			this.head.prev = null;
 			return removed;
 		}
-		this.size > 0 ? this.size -= 1 : null;
-		if (this.head) {
-			this.head = this.head.next;
-		}
-		return removed;
 	}
 
 	// return item at front of queue
@@ -46,7 +44,7 @@ class QueueList {
 
 	// return true if queue is empty
 	isEmpty() {
-		return this.queue.length === 0;
+		return this.size === 0;
 	}
 }
 
