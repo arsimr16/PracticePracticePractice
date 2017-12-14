@@ -44,7 +44,7 @@ class QueueList {
 
 	// return item at front of queue
 	peek() {
-		return this.head;
+		return this.head ? this.head.value : null;
 	}
 
 	// return true if queue is empty
@@ -61,45 +61,28 @@ class QueueObj {
 	}
 
 	add(item) {
-		this.queue[size] = item;
+		this.queue[this.size] = item;
 		this.size += 1;
 	}
 
 	remove() {
-		// if (!this.isEmpty()) {
-		// 	const removed = this.peek();
-		// 	for (var i = 1; i <= this.size; i += 1) {
-		// 		this.queue[i - 1] = this.queue[i];
-		// 	}
-		// 	delete this.queue[this.size - 1];
-		// 	this.size -= 1;
-		// 	return removed;
-		// }
-		if (this.size === 0) {
-			return;
-		}
-		const removed = this.head;
-		console.log(this.size);
-		if (this.size === 1) {
-			console.log('size = 1');
-			this.head = null;
-			this.tail = null;
-		} else {
-			for (let i = 1; i < this.size; i += 1) {
+		if (!this.isEmpty()) {
+			const removed = this.peek();
+			for (var i = 1; i <= this.size; i += 1) {
 				this.queue[i - 1] = this.queue[i];
 			}
 			delete this.queue[this.size - 1];
+			this.size -= 1;
+			return removed;
 		}
-		this.size -= 1;
-		return removed;
 	}
 
 	peek() {
-		return this.queue[0];
+		return this.queue[0] ? this.queue[0] : null;
 	}
 
 	isEmpty() {
-		return this.queue.size === 0;
+		return this.size === 0;
 	}
 }
 
@@ -111,7 +94,8 @@ const assertDeepEquals = (actual, expected, testname) => {
 	}
 };
 
-// tests for QueueList
+// tests
+console.log('TESTS FOR QueueList:')
 const testQ0 = new QueueList();
 assertDeepEquals(testQ0.peek(), null, 'peek method should return null when queue is empty');
 assertDeepEquals(testQ0.isEmpty(), true, 'isEmpty method should return true when queue is empty');
@@ -132,6 +116,7 @@ assertDeepEquals(testQ0.tail, null, 'tail should be null when size = 0');
 
 testQ0.add(1);
 testQ0.add(2);
+assertDeepEquals(testQ0.peek(), 1, 'should return value of head when queue is not empty');
 assertDeepEquals(testQ0.size, 2, 'size should equal 2 after two items are added');
 assertDeepEquals(testQ0.head.value, 1, 'head value should be correct when size = 2');
 assertDeepEquals(testQ0.head.prev, null, 'head prev value should be null');
@@ -148,5 +133,35 @@ assertDeepEquals(testQ0.tail.value, 4, 'tail value should equal 4');
 assertDeepEquals(testQ0.tail.prev.value, 3, 'tail prev should point to correct node as values are added');
 assertDeepEquals(testQ0.tail.next, null, 'tail next should always be null');
 
-// tests for QueueObj
+console.log('');
+// more tests
+console.log('TESTS FOR QueueObj');
+const testQ1 = new QueueObj();
+assertDeepEquals(testQ1.peek(), null, 'peek should return null when queue is empty');
+assertDeepEquals(testQ1.isEmpty(), true, 'isEmpty method should return true when queue is empty');
 
+testQ1.add(1);
+assertDeepEquals(testQ1.size, 1, 'size should equal 1 after one item is added');
+assertDeepEquals(testQ1.isEmpty(), false, 'isEmpty shoudl return false when queue is not empty');
+assertDeepEquals(testQ1.queue[0], 1, 'should add value to proper place in queue');
+
+testQ1.remove();
+assertDeepEquals(testQ1.size, 0, 'size should equal 0 after all items removed');
+assertDeepEquals(testQ1.queue[0], undefined, 'queue[0] should be undefined when size = 0');
+
+testQ1.add(1);
+testQ1.add(2);
+assertDeepEquals(testQ1.peek(), 1, 'should return value of head when queue is not empty');
+assertDeepEquals(testQ1.size, 2, 'size should equal 2 after two items are added');
+const queueValues = [];
+queueValues.push(testQ1.queue[0]);
+queueValues.push(testQ1.queue[1]);
+assertDeepEquals(queueValues, [1, 2], 'queue should contain correct values in order');
+assertDeepEquals(testQ1.queue[2], undefined, 'queue[size], should be undefined');
+
+testQ1.add(3);
+testQ1.add(4);
+queueValues.push(testQ1.queue[2]);
+queueValues.push(testQ1.queue[3]);
+assertDeepEquals(queueValues, [1, 2, 3, 4], 'queue should contain correct values in order');
+assertDeepEquals(testQ1.queue[4], undefined, 'queue[size], should be undefined');
