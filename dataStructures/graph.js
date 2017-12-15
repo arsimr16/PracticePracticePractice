@@ -10,40 +10,42 @@ class Queue {
 		return { value, prev: null, next: null };
 	}
 
+	// add item to end of queue
 	add(value) {
-		const newNode = this.makeNode(value);
+		const newTail = this.makeNode(value);
 		if (!this.head) {
-			this.head = newNode;
-		}
+			this.head = newTail;
+		} 
 		if (this.tail) {
-			newNode.prev = this.tail;
-			this.tail.next = newNode;
+			newTail.prev = this.tail;
+			this.tail.next = newTail;
 		}
-		this.tail = newNode;
+		this.tail = newTail;
 		this.size += 1;
 	}
 
+	// remove item from front of queue
 	remove() {
-		if (!this.isEmpty) {
-			const removed = this.head;
+		if (!this.isEmpty()) {
+			const removed = this.peek();
 			this.size -= 1;
-			this.head = this.head.next;
-			this.head.prev = null;
+			if (this.size === 0) {
+				this.head = null;
+				this.tail = null;
+			} else {
+				this.head = this.head.next;
+				this.head.prev = null;
+			}
 			return removed;
 		}
 	}
 
-	contains(target) {
-		let curr = this.head;
-		while (curr) {
-			if (curr.value === target) {
-				return true;
-			}
-			curr = curr.next;
-		}
-		return false;
+	// return item at front of queue
+	peek() {
+		return this.head ? this.head.value : null;
 	}
 
+	// return true if queue is empty
 	isEmpty() {
 		return this.size === 0;
 	}
@@ -99,7 +101,7 @@ class Graph {
 	}
 
 	depthFirst() {
-		//TODO
+		// TODO
 	}
 
 	breadthFirst(node, cb) {
@@ -176,3 +178,46 @@ class GraphAM {
 		}
 	}
 }
+
+// tests
+const assertDeepEquals = (actual, expected, testname) => {
+	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+		console.log(`passed ${testname}`);
+	} else {
+		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
+	}
+};
+
+// Graph
+console.log('TESTS FOR Graph');
+const graph0 = new Graph();
+graph0.addNode(1);
+assertDeepEquals(graph0.contains(1), true, 'contains should return true when graph contains target value');
+assertDeepEquals(graph0.contains(2), false, 'contains should return false when graph does not contain target');
+
+graph0.addNode(2);
+graph0.addNode(3);
+graph0.addEdge(1, 2);
+assertDeepEquals(graph0.hasEdge(1, 2), true, 'hasEdge should return true when edge exists between two inputs');
+assertDeepEquals(graph0.hasEdge(2, 1), true, 'addEdge should add an undirected connection between nodes');
+
+const graphValues = [];
+graph0.forEachNode(x => graphValues.push(x * 2));
+assertDeepEquals(graphValues, [2, 4, 6], 'forEachNode should invoke passed in callback on each node');
+
+graph0.removeNode(2);
+assertDeepEquals(graph0.contains(2), false, 'contains should return false after node has been removed');
+assertDeepEquals(graph0.hasEdge(1, 2), false, 'should remove edge if one of nodes was removed');
+
+graph0.addEdge(1, 3);
+graph0.addNode(4);
+graph0.removeEdge(3, 1);
+assertDeepEquals(graph0.hasEdge(1, 3), false, 'removeEdge should remove edge between input nodes');
+
+const breadthFirstValues = [];
+breadthFirstValues.push(graph0.breadthFirst(1, x => breadthFirstValues.push(x)));
+console.log(breadthFirstValues);
+
+// GraphAM
+console.log('');
+console.log('TESTS FOR GraphAM');
