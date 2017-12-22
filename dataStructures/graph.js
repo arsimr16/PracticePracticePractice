@@ -49,6 +49,18 @@ class Queue {
 	isEmpty() {
 		return this.size === 0;
 	}
+
+	// return true if queue contains target value
+	contains(target) {
+		let curr = this.head;
+		while(curr) {
+			if (curr.value === target) {
+				return true;
+			}
+			curr = curr.next;
+		}
+		return false;
+	}
 }
 
 class Graph {
@@ -109,14 +121,14 @@ class Graph {
 			const visited = {};
 			const toVisit = new Queue();
 			toVisit.add(node);
-			while(!toVisit.isEmpty) {
-				let nextInQueue = toVisit.head;
+			while(!toVisit.isEmpty()) {
+				let nextInQueue = toVisit.head.value;
 				// add direct neighbors that are not in queue or visited
-				this.nodes[node].edges.forEach(edge => {
+				for (let edge in this.nodes[nextInQueue].edges) {
 					if (!visited[edge] && !toVisit.contains(edge)) {
 						toVisit.add(edge);
 					}
-				})
+				}
 				// invoke callback on node
 				cb(nextInQueue);
 				// add node at front of queue to visited
@@ -214,9 +226,23 @@ graph0.addNode(4);
 graph0.removeEdge(3, 1);
 assertDeepEquals(graph0.hasEdge(1, 3), false, 'removeEdge should remove edge between input nodes');
 
-const breadthFirstValues = [];
-breadthFirstValues.push(graph0.breadthFirst(1, x => breadthFirstValues.push(x)));
-console.log(breadthFirstValues);
+const graph1 = new Graph();
+graph1.addNode(1);
+graph1.addNode(2);
+graph1.addNode(3);
+graph1.addNode(4);
+graph1.addNode(5);
+graph1.addEdge(1, 2);
+graph1.addEdge(1, 3);
+graph1.addEdge(2, 3);
+graph1.addEdge(2, 4);
+
+const breadthFirstValues0 = [];
+const breadthFirstValues1 = [];
+graph1.breadthFirst(1, x => breadthFirstValues0.push(x));
+graph1.breadthFirst(4, x => breadthFirstValues1.push(x));
+assertDeepEquals(breadthFirstValues0, [1, 2, 3, 4], 'should invoke callback on breadth first traversal in correct order');
+assertDeepEquals(breadthFirstValues1, [4, 2, 1, 3], 'breadth first traversal can start at any node');
 
 // GraphAM
 console.log('');
