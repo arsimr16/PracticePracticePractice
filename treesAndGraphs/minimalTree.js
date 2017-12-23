@@ -36,11 +36,25 @@ class BST {
 }
 
 // I: a sorted array (increasing) of unique integers
-// O: a BST with minimal height
-// C: none
+// O: a BST
+// C: BST must have minimal height 
 // E: empty arr
 const minimalTree = (arr) => {
+	const result = new BST();
+	// inner recursive fn
+	const findNext = (arr) => {
+		if (arr.length > 0) {
+			const next = Math.floor(arr.length / 2);
+			result.insert(arr[next]);
+			const before = arr.slice(0, next);
+			const after = arr.slice(next);
+			findNext(before);
+			findNext(after);
+		}
+	};
 
+	findNext(arr);
+	return result;
 };
 // time complexity:
 // space complexity:
