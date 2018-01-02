@@ -146,16 +146,25 @@ class DirectedGraph {
 		return false;
 	}
 
-	// return true if toNode does not contain incoming edges from nodes other than those passed in as fromNodes
-	// assume graph contains all passed in nodes
+	// I: fromNodes (an array of strings), to node (a node in the graph)
+	// O: return true if toNode does not contain incoming edges from nodes other than those passed in as fromNodes
+	// C: none
+	// E: assume graph contains all passed in nodes
 	incomingEdges(fromNodes, toNode) {
-		let result = true;
 		// for each node in the graph
+		for (let node in this.nodes) {
 			// if curr node is not part of the fromNodes list
+			if (fromNodes.indexOf(node) === -1) {
 				// if curr node has an edge to toNode
-					// result = false;
-		return result;
+				if (this.nodes[node].edges[toNode]) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
+	// time complexity: O(n) - time grows with size of fromNodes argument and the number of nodes in the tree
+	// space compelxity: O(1)
 }
 
 // I: a list of projects (in an array) and a list of dependencies (an array of tuples)
@@ -167,7 +176,16 @@ const buildOrder = (projects, dependencies) => {
 	const toBuild = projects;
 	const buildOrder = [];
 	// create a directed graph - each project is a node and each dependency is an edge
+	const projGraph = new DirectedGraph();
+	projects.forEach(project => projGraph.addNode(project));
+	dependencies.forEach(dependency => projGraph.addEdge(dependency[0], dependency[1]));
 	// any node with only incoming edges from the already built projects can be built
+	toBuild.forEach(project => {
+		if (projGraph.incomingEdges(buildOrder, project)) {
+			buildOrder.push(project);
+			// remove project from toBuild
+		}
+	})
 	// repeat until all projects are built or
 	// return error if any projects cannot be built
 	return buildOrder;
@@ -185,5 +203,22 @@ const assertDeepEquals = (actual, expected, testname) => {
 };
 
 // incoming edges method
+const test0 = new DirectedGraph();
+test0.addNode(1);
+test0.addNode(2);
+test0.addNode(3);
+test0.addNode(4);
+assertDeepEquals(test0.incomingEdges([], 1), true, 'should return true when there are no incoming edges to the passed in node');
+
+test0.addEdge(1, 2);
+assertDeepEquals(test0.incomingEdges(['1'], 2), true, 'should return true when only incoming edges are included in first argument');
+assertDeepEquals(test0.incomingEdges([], 2), false, 'should return false when node contains incoming edge other than those passed in');
+
+test0.addEdge(3, 2);
+test0.addEdge(4, 2);
+assertDeepEquals(test0.incomingEdges(['1', '3', '4'], 2), true, 'should return true when multiple incoming edges are passed in');
+
+test0.addEdge(2, 4);
+assertDeepEquals(test0.incomingEdges(['1', '2', '3'], 4), true, 'should return true when incoming edge is listed in passed in argument');
 
 // buildOrder function
