@@ -146,7 +146,7 @@ class DirectedGraph {
 		return false;
 	}
 
-	// I: fromNodes (an array of strings), to node (a node in the graph)
+	// I: fromNodes (an array of strings), toNode (a node in the graph)
 	// O: return true if toNode does not contain incoming edges from nodes other than those passed in as fromNodes
 	// C: none
 	// E: assume graph contains all passed in nodes
@@ -179,19 +179,29 @@ const buildOrder = (projects, dependencies) => {
 	const projGraph = new DirectedGraph();
 	projects.forEach(project => projGraph.addNode(project));
 	dependencies.forEach(dependency => projGraph.addEdge(dependency[0], dependency[1]));
-	// any node with only incoming edges from the already built projects can be built
-	toBuild.forEach(project => {
-		if (projGraph.incomingEdges(buildOrder, project)) {
-			buildOrder.push(project);
-			// remove project from toBuild
+	let i = 0;
+	// repeat until all projects that can be built are built
+	while (i < toBuild.length) {
+		// if the project can be built, add it to buildOrder and remove from toBuild
+		if (projGraph.incomingEdges(buildOrder, toBuild[i])) {
+			buildOrder.push(toBuild[i].toString());
+			toBuild.splice(i, 1);
+			// reset i to 0 because new projects might now be able to be built
+			i = 0;
 		}
-	})
-	// repeat until all projects are built or
-	// return error if any projects cannot be built
+		// increment i if project cannot currently be built
+		i += 1;
+	}
+	// when the while loop is over no more projects can be built
+	// if any projects did not get built, return an error
+	if (toBuild.length) {
+		return 'no valid build order';
+	}
+	// otherwise the build was successful, return the valid build order
 	return buildOrder;
 };
-// time complexity:
-// space compelxity:
+// time complexity: 
+// space compelxity: O(n) where n is size of projects array
 
 // tests
 const assertDeepEquals = (actual, expected, testname) => {
