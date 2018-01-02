@@ -11,67 +11,6 @@
 // output:
 //   build order: f, e, a, b, d, c
 
-class Queue {
-	constructor() {
-		this.head = null;
-		this.tail = null;
-		this.size = 0;
-	}
-
-	makeNode(value) {
-		return { value, prev: null, next: null };
-	}
-
-	add(value) {
-		const newTail = this.makeNode(value);
-		if (!this.head) {
-			this.head = newTail;
-		} 
-		if (this.tail) {
-			newTail.prev = this.tail;
-			this.tail.next = newTail;
-		}
-		this.tail = newTail;
-		this.size += 1;
-	}
-
-	remove() {
-		if (!this.isEmpty()) {
-			const removed = this.peek();
-			this.size -= 1;
-			if (this.size === 0) {
-				this.head = null;
-				this.tail = null;
-			} else {
-				this.head = this.head.next;
-				this.head.prev = null;
-			}
-			return removed;
-		}
-	}
-
-	peek() {
-		return this.head ? this.head.value : null;
-	}
-
-	isEmpty() {
-		return this.size === 0;
-	}
-
-	contains(target) {
-		let curr = this.head;
-		while(curr) {
-			if (curr.value === target) {
-				return true;
-			}
-			curr = curr.next;
-		}
-		return false;
-	}
-}
-
-/********************************************************/
-
 class DirectedGraph {
 	constructor() {
 		this.nodes = {};
@@ -85,65 +24,10 @@ class DirectedGraph {
 		return !!this.nodes[value];
 	}
 
-	removeNode(value) {
-		if (this.contains(value)) {
-			delete this.nodes[value];
-			for (let node in this.nodes) {
-				if (this.nodes[node].edges[value]) {
-					delete this.nodes[node].edges[value];
-				}
-			}
-		}
-	}
-
-	hasEdge(fromNode, toNode) {
-		if (!this.contains([fromNode])) {
-			return false;
-		}
-		return !!this.nodes[fromNode].edges[toNode];
-	}
-
 	addEdge(fromNode, toNode) {
 		if (this.contains(fromNode) && this.contains(toNode)) {
 			this.nodes[fromNode].edges[toNode] = toNode;
 		}
-	}
-
-	removeEdge(fromNode, toNode) {
-		if (this.contains(fromNode) && this.contains(toNode)) {
-			delete this.nodes[fromNode].edges[toNode];
-		}
-	}
-
-	forEachNode(cb) {
-		for (let node in this.nodes) {
-			cb(node);
-		}
-	}
-
-	areConnected(fromNode, toNode) {
-		if (this.contains(fromNode) && this.contains(toNode)) {
-			if (fromNode === toNode) {
-				return true;
-			}
-			const visited = {};
-			const toVisit = new Queue();
-			toVisit.add(fromNode);
-			while(!toVisit.isEmpty()) {
-				let nextInQueue = toVisit.head.value;
-				for (let edge in this.nodes[nextInQueue].edges) {
-					if (edge.toString() === toNode.toString()) {
-						return true;
-					}
-					if (!visited[edge] && !toVisit.contains(edge)) {
-						toVisit.add(edge);
-					}
-				}
-				visited[nextInQueue] = nextInQueue;
-				toVisit.remove();
-			}
-		}
-		return false;
 	}
 
 	// I: fromNodes (an array of strings), toNode (a node in the graph)
@@ -188,9 +72,10 @@ const buildOrder = (projects, dependencies) => {
 			toBuild.splice(i, 1);
 			// reset i to 0 because new projects might now be able to be built
 			i = 0;
+		} else {
+			// increment i if project cannot currently be built
+			i += 1;
 		}
-		// increment i if project cannot currently be built
-		i += 1;
 	}
 	// when the while loop is over no more projects can be built
 	// if any projects did not get built, return an error
@@ -200,7 +85,7 @@ const buildOrder = (projects, dependencies) => {
 	// otherwise the build was successful, return the valid build order
 	return buildOrder;
 };
-// time complexity: 
+// time complexity: worst case is O(n^2)? [O(n) + O(n - 1) + O(n - 2) etc.] where n is the number of projects
 // space compelxity: O(n) where n is size of projects array
 
 // tests
@@ -232,3 +117,5 @@ test0.addEdge(2, 4);
 assertDeepEquals(test0.incomingEdges(['1', '2', '3'], 4), true, 'should return true when incoming edge is listed in passed in argument');
 
 // buildOrder function
+assertDeepEquals(buildOrder(['a', 'b', 'c', 'd', 'e', 'f'], [['a', 'd'], ['f', 'b'], ['b', 'd'], ['f', 'a'], ['d', 'c']]), ['e', 'f', 'a', 'b', 'd', 'c'], 'should return valid build order when possible');
+assertDeepEquals(buildOrder(['a', 'b', 'c', 'd', 'e', 'f'], [['a', 'd'], ['f', 'b'], ['b', 'd'], ['f', 'a'], ['c', 'f'], ['d', 'c']]), 'no valid build order', 'should return error message when no valid build order is found');
