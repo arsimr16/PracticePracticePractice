@@ -1,32 +1,34 @@
 //Find all subsets that sum up to k
 
-//subSets([1,2,3,4,5,6], 10) //[ [ 1, 2, 3, 4 ], [ 1, 3, 6 ], [ 1, 4, 5 ], [ 2, 3, 5 ], [ 4, 6 ] ]
-//subSets([1,2,1], 3) //[ [ 1, 2 ], [ 2, 1 ] ]
+//subSets([1,2,1], 3) => [[1, 2], [2, 1]]
+//subSets([1,2,3,4,5,6], 10) => [[1, 2, 3, 4], [1, 3, 6], [1, 4, 5], [2, 3, 5], [4, 6]...]
 
-// no subsets => return [];
-
-// I: arr of positive integers, sum (k)
+// I: arr of integers, sum (k)
 // O: arr of arrays, each arr is individula ints that add up to k
 // C: none 
-// E: if no subsets, return []; order of addition matters
+// E: if no subsets, return []; [1, 2] and [2, 1] count as different sets; 
+// repeated numbers are allowed, but not distinguished in unique subsets 
+// e.g. [2, and the first 1] is not different from [2, and the second 1]
+const findAllSubsets = (integers, k) => {
+  const results = [];
+  const findSubset = (i = 0, currSubset = [], sum = 0) => {
+    // if k === 0, the curr subset is valid
+    if (sum === k) {
+      results.push(currSubset);
+    }
+    // if sum > k, the subset is invalid
+    // if i >= integers.length, end recursive calls
+    if (sum > k || i >= integers.length) {
+      return;
+    }
+    // include current int
+    findSubset(i + 1, currSubset.push(integers[i]), sum += integers[i]);
+    // exclude current int
+    findSubset(i + 1, currSubset, sum);
+  };
+  return results;
+};
+// time complexity: O(2^n) - exponential, each recursive call has two more possibilities
+// space complexity: O(2^n) - store all potential subsets
 
-// result = []
-// get rid of any integers above k 
-// if sum of all values < k, return result
-
-// iterate through arr (i)
-  // curr subSet = arr
-  // curr total = 0
-  // remaining = [set - curr value]
-  // while remaining len > 0
-    // iterate through remaining
-      // add curr value to subSet and total
-      // if total === k
-        // add curr subSet to result arr
-      // else if total < k
-        // keep iterating
-      // else if total > k 
-        // stop, not valid subset
-      // remove remaining[0]
-      
-  // return result;
+// tests
