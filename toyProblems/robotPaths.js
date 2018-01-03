@@ -21,12 +21,12 @@ class Board {
 	}
 }
 
-// I:
-// O:
-// C:
-// E:
-const robotPaths = () => {
-
+// I: initially called with n (board size); optional parameters: board, row, column; initialize optional values if not given
+// O: number of unique paths from upper left to lower right corner
+// C: should work for any size grid
+// E: n = 1, start === end; 
+const robotPaths = (n, board = new Board(n), i = 0, j = 0) => {
+	
 }
 // time complexity:
 // space complexity:
@@ -47,5 +47,14 @@ const test0 = new Board(5);
 assertDeepEquals(test0.board.length, 5, 'board should have n rows');
 assertDeepEquals(test0.board[0].length, 5, 'board should have n columns');
 assertDeepEquals(test0.board[0].every(item => item === false), true, 'should initialize all positions to false');
+assertDeepEquals(test0.hasBeenVisited(2, 3), false, 'hasBeenVisited should return false if value is false');
+
+test0.togglePiece(2, 3);
+assertDeepEquals(test0.board[2][3], true, 'togglePiece method should change false value to true');
+assertDeepEquals(test0.hasBeenVisited(2, 3), true, 'hasBeenVisited should return true if value is true');
+
+test0.togglePiece(2, 3);
+assertDeepEquals(test0.hasBeenVisited(2, 3), false, 'togglePiece should change false value to true');
 
 // robotPaths
+robotPaths(5);
