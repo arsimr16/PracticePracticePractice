@@ -7,7 +7,15 @@
 class Board {
 	// create an NxN board filled with false values
 	constructor(n) {
-		this.board = Array(n).fill(Array(n).fill(false));
+		// this.board = Array(n).fill(Array(n).fill(false));
+		// the above line causes a weird bug
+		// togglePiece(i, j) causes every row (0 -> n) at column j to be toggled
+		// (not just the one piece at (i, j))
+
+		this.board = [];
+		for (let i = 0; i < n; i += 1) {
+			this.board.push(Array(n).fill(false));
+		}
 	}
 
 	// toggle value at row i, column j (true or false)
@@ -43,6 +51,8 @@ const robotPaths = (n, board = new Board(n), i = 0, j = 0) => {
 		robotPaths(n, board, i, j - 1) + 
 		robotPaths(n, board, i + 1, j) + 
 		robotPaths(n, board, i - 1, j);
+	// untoggle piece so that function can properly backtrack
+	board.togglePiece(i, j);
 	// return the total number of unique paths
 	return result;
 }
@@ -52,8 +62,8 @@ const robotPaths = (n, board = new Board(n), i = 0, j = 0) => {
 /**************************************************************/
 
 // tests
-const assertDeepEquals = (actual, expected, testname) => {
-	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+const assertEquals = (actual, expected, testname) => {
+	if (actual === expected) {
 		console.log(`passed ${testname}`);
 	} else {
 		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
@@ -62,17 +72,23 @@ const assertDeepEquals = (actual, expected, testname) => {
 
 // board class
 const test0 = new Board(5);
-assertDeepEquals(test0.board.length, 5, 'board should have n rows');
-assertDeepEquals(test0.board[0].length, 5, 'board should have n columns');
-assertDeepEquals(test0.board[0].every(item => item === false), true, 'should initialize all positions to false');
-assertDeepEquals(test0.hasBeenVisited(2, 3), false, 'hasBeenVisited should return false if value is false');
+assertEquals(test0.board.length, 5, 'board should have n rows');
+assertEquals(test0.board[0].length, 5, 'board should have n columns');
+assertEquals(test0.board[0].every(item => item === false), true, 'should initialize all positions to false');
+assertEquals(test0.hasBeenVisited(2, 3), false, 'hasBeenVisited should return false if value is false');
 
 test0.togglePiece(2, 3);
-assertDeepEquals(test0.board[2][3], true, 'togglePiece method should change false value to true');
-assertDeepEquals(test0.hasBeenVisited(2, 3), true, 'hasBeenVisited should return true if value is true');
+assertEquals(test0.board[2][3], true, 'togglePiece method should change false value to true');
+assertEquals(test0.hasBeenVisited(2, 3), true, 'hasBeenVisited should return true if value is true');
 
 test0.togglePiece(2, 3);
-assertDeepEquals(test0.hasBeenVisited(2, 3), false, 'togglePiece should change false value to true');
+assertEquals(test0.hasBeenVisited(2, 3), false, 'togglePiece should change false value to true');
 
 // robotPaths
-robotPaths(5);
+assertEquals(robotPaths(0), 0, 'should return correct number of paths when board size is 0');
+assertEquals(robotPaths(1), 1, 'should return correct number of paths when board size is 1');
+assertEquals(robotPaths(2), 2, 'should return correct number of paths when board size is 2');
+assertEquals(robotPaths(3), 12, 'should return correct number of paths when board size is 3');
+assertEquals(robotPaths(4), 184, 'should return correct number of paths when board size is 4');
+assertEquals(robotPaths(5), 8512, 'should return correct number of paths when board size is 5');
+assertEquals(robotPaths(6), 1262816, 'should return correct number of paths when board size is 6');
