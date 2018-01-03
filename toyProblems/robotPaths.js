@@ -24,9 +24,27 @@ class Board {
 // I: initially called with n (board size); optional parameters: board, row, column; initialize optional values if not given
 // O: number of unique paths from upper left to lower right corner
 // C: should work for any size grid
-// E: n = 1, start === end; 
+// E: empty grid -> 0 paths; 1x1 grid -> 1 path;
 const robotPaths = (n, board = new Board(n), i = 0, j = 0) => {
-	
+	// no possible path if on a position that has already
+	// been visited or is off the board
+	if (!(i >= 0 && i < n && j >= 0 && j < n) || board.hasBeenVisited(i, j)) {
+		return 0;
+	}
+	// one possible path if at the lower right corner
+	// (the path that led there)
+	if (i === n - 1 && j === n - 1) {
+		return 1;
+	}
+	// toggle board at current position
+	board.togglePiece(i, j);
+	// move robot in all possible directions
+	const result = robotPaths(n, board, i, j + 1) + 
+		robotPaths(n, board, i, j - 1) + 
+		robotPaths(n, board, i + 1, j) + 
+		robotPaths(n, board, i - 1, j);
+	// return the total number of unique paths
+	return result;
 }
 // time complexity:
 // space complexity:
