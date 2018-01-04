@@ -15,7 +15,19 @@ const firstCommonAncestor = (tree, node1, node2) => {
 	if (node1 === node2) {
 		return node1;
 	}
-	// 
+	// get path to node1
+	// get path to node2
+	// iterate backwards through longer path
+	// return the first node in the longer path that is also in the shorter path
+
+	// OR
+
+	// write helper function to return whether a node is a parent of a child
+	// check left and right child of the root
+	// if left or right child contians both nodes
+		// do the same thing with that child
+	// else if one child is on the left and another on the right
+		// return the current node
 };
 // time complexity:
 // space complexity:
