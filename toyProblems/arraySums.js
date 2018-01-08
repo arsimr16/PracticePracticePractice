@@ -15,7 +15,6 @@ const arraySums = (D, T) => {
 	const nums = Array.from(uniqNums);
 	// sort numbers in ascending order
 	nums.sort();
-	console.log(nums);
 	// recursive inner function:
 	const findSum = (i = 0, sum = 0) => {
 		// limit recursive calls to size of array D
@@ -32,8 +31,8 @@ const arraySums = (D, T) => {
 		// if the current sum <= T, increment the permutations count
 		if (sum <= T) {
 			permutations += 1;
+			findSum(i + 1, sum);
 		}
-		findSum(i + 1, sum);
 	};
 	findSum();
 	return permutations;
@@ -50,6 +49,8 @@ const assertEquals = (actual, expected, testname) => {
 	}
 };
 
-
+assertEquals(arraySums([1, 2, 3, 5], 5), 7, 'should return correct number of permutations');
+// 7 permutations: [1],[2],[3],[5],[1,2],[1,3],[2,3]
+assertEquals(arraySums([], 10), 0, 'should return 0 when D is empty');
 assertEquals(arraySums([4, 2.1, 4, 7, -2, 8], 6), 8, 'should handle duplicates, negative numbers, and non-integers');
-// permutations: [-2, 2.1, 4],[-2, 4],[-2, 7], [2.1],[4],[-2],[-2, 8],[-2, 2.1]
+// 8 permutations: [-2, 2.1, 4],[-2, 4],[-2, 7], [2.1],[4],[-2],[-2, 8],[-2, 2.1]
