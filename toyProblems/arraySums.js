@@ -9,19 +9,47 @@
 // assume permutations must have at least 1 number (i.e. an empty array D has 0 permutations <= T and 
 // a set of 0 numbers selected from D ([]) is not a valid permutations <= T);
 const arraySums = (D, T) => {
-	const permutations = 0;
-	// sort numbers in ascending order
+	let permutations = 0;
 	// remove duplicates
-	// recursive solution:
-	// iterate through D
-	// track current sums
-	// try adding and not adding the current number
-	// everytime a number is added
+	const uniqNums = new Set(D);
+	const nums = Array.from(uniqNums);
+	// sort numbers in ascending order
+	nums.sort();
+	console.log(nums);
+	// recursive inner function:
+	const findSum = (i = 0, sum = 0) => {
+		// limit recursive calls to size of array D
+		if (i >= D.length) {
+			return;
+		}
+		// iterate through D
+		// track current sums
+		// try not adding and adding the current number
+		// not adding:
+		findSum(i + 1, sum);
+		// adding:
+		sum += D[i];
 		// if the current sum <= T, increment the permutations count
-		// if the current sum is > T, stop adding numbers to the invalid permutation
+		if (sum <= T) {
+			permutations += 1;
+		}
+		findSum(i + 1, sum);
+	};
+	findSum();
 	return permutations;
 };
 // time complexity: O(2^n) exponential b/c there are two possibilities for each number (do or don't add it)
 // space complexity: also exponential b/c you have to store all of the current sums
 
 // tests:
+const assertEquals = (actual, expected, testname) => {
+	if (actual === expected) {
+		console.log(`passed ${testname}`);
+	} else {
+		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
+	}
+};
+
+
+assertEquals(arraySums([4, 2.1, 4, 7, -2, 8], 6), 8, 'should handle duplicates, negative numbers, and non-integers');
+// permutations: [-2, 2.1, 4],[-2, 4],[-2, 7], [2.1],[4],[-2],[-2, 8],[-2, 2.1]
