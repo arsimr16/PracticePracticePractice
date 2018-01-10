@@ -27,11 +27,15 @@
 //				[[1, 3], [5, 8], [2, 5]] -> [[1, 5], [5, 8]] -> [[1, 8]]
 
 const combineRanges = (arr) => {
-
+	// copy input arr
+	// sort ranges in arr by min in ascending order
+	// iterate over sorted ranges started with second range
+		// combine ranges if min of curr range is less than max of previous range
+	// return combined ranges
 };
 
-// time complexity:
-// space complexity:
+// time complexity: O(n log n)
+// space complexity: O(n) - create copy of arr to avoid mutating inputs
 
 // tests:
 // not a true deep equality check, but this is okay since I am controlling I/O
@@ -44,8 +48,8 @@ const assertDeepEquals = (actual, expected, testname) => {
 };
 
 assertDeepEquals(combineRanges([[]]), [[]], 'should not combine anything when input is empty');
-assertDeepEquals(combineRanges([[1, 3], [-0.5, 0.5], [2, 6]]), [[1, 6], [-0.5, 0.5]], 'should return correct combined ranges');
-assertDeepEquals(combineRanges([[1, 3], [-10, -5], [0, 4]]), [[0, 4], [-10, -5]], 'should combine ranges when one fits inside other');
+assertDeepEquals(combineRanges([[1, 3], [-0.5, 0.5], [2, 6]]), [[-0.5, 0.5], [1, 6]], 'should return correct combined ranges');
+assertDeepEquals(combineRanges([[1, 3], [-10, -5], [0, 4]]), [[-10, -5], [0, 4]], 'should combine ranges when one fits inside other');
 assertDeepEquals(combineRanges([[1, 3], [2, 4], [5, 7]]), [[1, 4], [5, 7]], 'should combine ranges when one boundary crosses another');
 assertDeepEquals(combineRanges([[1, 3], [3, 5]]), [[1, 5]], 'should combine ranges when max of one equals min of another');
-assertDeepEquals(combineRanges([[10.5, 11], [1, 3], [5, 8], [2, 5]]), [[10.5, 11], [1, 8]], 'should keep combining ranges until nothing can be combined');
+assertDeepEquals(combineRanges([[10.5, 11], [1, 3], [5, 8], [2, 5]]), [[1, 8], [10.5, 11]], 'should keep combining ranges until nothing can be combined');
