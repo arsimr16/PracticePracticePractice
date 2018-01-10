@@ -27,11 +27,26 @@
 //				[[1, 3], [5, 8], [2, 5]] -> [[1, 5], [5, 8]] -> [[1, 8]]
 
 const combineRanges = (arr) => {
-	// copy input arr
+	const results = arr.slice();
+
 	// sort ranges in arr by min in ascending order
-	// iterate over sorted ranges started with second range
-		// combine ranges if min of curr range is less than max of previous range
-	// return combined ranges
+	results.sort((a, b) => {
+		return a[0] - b[0];
+	});
+
+	let i = 0;
+	while (i < results.length - 1) {
+		// combine ranges if min of next is less or equal to max of curr
+		if (results[i + 1][0] <= results[i][1]) {
+			// update curr range, remove next range
+			results[i] = [results[i][0], Math.max(results[i][1], results[i + 1][1])];
+			results.splice(i + 1, 1);
+			// decrement i to handle combining multiple ranges in a row
+			i--;
+		}
+		i++;
+	}
+	return results;
 };
 
 // time complexity: O(n log n)
