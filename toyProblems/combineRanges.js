@@ -34,3 +34,18 @@ const combineRanges = (arr) => {
 // space complexity:
 
 // tests:
+// not a true deep equality check, but this is okay since I am controlling I/O
+const assertDeepEquals = (actual, expected, testname) => {
+	if (JSON.stringify(actual) === JSON.stringify(expected)) {
+		console.log(`passed "${testname}"`);
+	} else {
+		console.log(`FAILED "${testname}": expected "${expected}", but got "${actual}"`);
+	}
+};
+
+assertDeepEquals(combineRanges([[]]), [[]], 'should not combine anything when input is empty');
+assertDeepEquals(combineRanges([[1, 3], [-0.5, 0.5], [2, 6]]), [[1, 6], [-0.5, 0.5]], 'should return correct combined ranges');
+assertDeepEquals(combineRanges([[1, 3], [-10, -5], [0, 4]]), [[0, 4], [-10, -5]], 'should combine ranges when one fits inside other');
+assertDeepEquals(combineRanges([[1, 3], [2, 4], [5, 7]]), [[1, 4], [5, 7]], 'should combine ranges when one boundary crosses another');
+assertDeepEquals(combineRanges([[1, 3], [3, 5]]), [[1, 5]], 'should combine ranges when max of one equals min of another');
+assertDeepEquals(combineRanges([[10.5, 11], [1, 3], [5, 8], [2, 5]]), [[10.5, 11], [1, 8]], 'should keep combining ranges until nothing can be combined');
