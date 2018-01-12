@@ -26,101 +26,62 @@ input:  binaryMatrix = [ [0,    1,    0,    0,    0],
                          [0,    0,    0,    0,    0] ]
                          
             island count = 6
-//
-output: 6 # since this is the number of islands in binaryMatrix.
-          
-          
-Constraints:
-
-[time limit] 5000ms
-
-[input] array.array.int binaryMatrix
-
-1 ≤ binaryMatrix.length ≤ 100
-1 ≤ binaryMatrix[i].length ≤ 100
-[output] integer
-    
+// output: 6 # since this is the number of islands in binaryMatrix.    
 */
-
-// [1, 1]
 
 // I: matrix of binary ints
 // O: number of islands
-// C:
+// C: none
 // E: any 1s in same column or row touching form an island; diagonal doesn't count
-
-// island count
-
-// iterate through matrix values
-// if curr item is 1
-  // determine if it is part of an island we already counted or a new island  
-  // check the curr position in matrix copy
-    // if the curr position is available
-      // we have new island; increment island count
-      // check all surrounding positions and mark any positions that are part of the same island as false
-      
-      // algorithm to check what belongs to an island
-      // check next position in same row, keep including the spaces until we reach 0
-      // check each columns in next row that has 1 in curr row
-          // if space in same column has 1,
-            // check left and right of that space
-              // repeat everytime we find 1
 
 const countIslands = (matrix) => {
   let islandCount = 0;
-  
+  // iterate over all values in matrix
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix.length; j++) {
+      // if the current item is part of an island
       if (matrix[i][j] === 1) {
-        matrix[i][j] = 0;
+        // increase the island count
         islandCount++;
-        const checkNeighbors = (i, j) => {
-          // check left
-          if (i >= 0 && i < matrix.length && j - 1 >= 0 && j - 1 < matrix.length) {
-            if (matrix[i][j - 1] === 1) {
-              matrix[i][j - 1] = 0;
-              checkNeighbors(i, j - 1);
-            } 
-          }
-          // check right
-          if (i >= 0 && i < matrix.length && j + 1 >= 0 && j + 1 < matrix.length) {
-            if (matrix[i][j + 1] === 1) {
-              matrix[i][j + 1] = 0;
-              checkNeighbors(i, j + 1);
-            } 
-          }
-          // check top
-          if (i - 1 >= 0 && i - 1 < matrix.length && j >= 0 && j < matrix.length) {
-            if (matrix[i - 1][j] === 1) {
-              matrix[i - 1][j] = 0;
-              checkNeighbors(i - 1, j);
-            } 
-          }
-          // check bottom
-          if (i + 1 >= 0 && i + 1 < matrix.length && j >= 0 && j < matrix.length) {
-            if (matrix[i + 1][j] === 1) {
-              matrix[i + 1][j] = 0;
-              checkNeighbors(i + 1, j);
-            } 
-          }
-          
-        }
+        // set curr position to 0 (to avoid counting same position again)
+        matrix[i][j] = 0;
+        // check all the neighbors of the curr position 
+        checkNeighbors(matrix, i, j);
       }
     }
   }
   return islandCount;
+};
+
+// if curr space is part of island, set curr space to 0 and check neighbors
+const checkSpace = (matrix, i, j) => {
+  // check if space is within matrix boundaries
+  if (i >= 0 && i < matrix.length && j >= 0 && j < matrix.length) {
+    if (matrix[i][j] === 1) {
+      matrix[i][j] = 0;
+      checkNeighbors(matrix, i, j);
+    }
+  }
+};
+
+// call checkSpace on left, right, top, and bottom neighbors
+const checkNeighbors = (matrix, i, j) => {
+  checkSpace(matrix, i - 1, j);
+  checkSpace(matrix, i + 1, j);
+  checkSpace(matrix, i, j - 1);
+  checkSpace(matrix, i, j + 1);
 }
 
+// tests:
 
-let input = [ [0,    1,    0,    1,    0],
-              [0,    0,    1,    1,    1],
-              [1,    0,    0,    1,    0],
-              [0,    1,    1,    0,    0],
-              [1,    0,    1,    0,    1] ];
+const input0 = [ [0,    1,    0,    1,    0],
+                 [0,    0,    1,    1,    1],
+                 [1,    0,    0,    1,    0],
+                 [0,    1,    1,    0,    0],
+                 [1,    0,    1,    0,    1] ];
 
-console.log(countIslands(input));
 
-// move checkNeighbors outside of countIslands
+
 // check curr item is within bounds
 // call function on all neighbors
 
