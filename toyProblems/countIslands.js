@@ -70,9 +70,16 @@ const checkNeighbors = (matrix, i, j) => {
   checkSpace(matrix, i + 1, j);
   checkSpace(matrix, i, j - 1);
   checkSpace(matrix, i, j + 1);
-}
+};
 
 // tests:
+const assertEquals = (actual, expected, testname) => {
+  if (actual === expected) {
+    console.log(`passed ${testname}`);
+  } else {
+    console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
+  }
+};
 
 const input0 = [ [0,    1,    0,    1,    0],
                  [0,    0,    1,    1,    1],
@@ -80,12 +87,4 @@ const input0 = [ [0,    1,    0,    1,    0],
                  [0,    1,    1,    0,    0],
                  [1,    0,    1,    0,    1] ];
 
-
-
-// check curr item is within bounds
-// call function on all neighbors
-
-
-
-
-
+assertEquals(countIslands(input0), 6, 'should return correct number of islands');
