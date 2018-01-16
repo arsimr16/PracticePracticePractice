@@ -33,6 +33,8 @@ var maxProfit = function(prices) {
     }
     return maxProfit;
 };
+// time complexity: O(n)
+// space complexity: O(1)
 
 
 
@@ -59,6 +61,8 @@ var maxProfit = function(prices) {
     }
     return maxProfit;
 };
+// time complexity: O(n)
+// space complexity: O(1)
 
 
 
@@ -70,3 +74,50 @@ var maxProfit = function(prices) {
 
 */
 
+// passes all test cases on leetcode
+
+// time complexity: O()
+// space complexity: O()
+
+
+
+
+
+// LEETCODE #188 - Best time to buy and sell stock IV
+
+/*
+
+*/
+
+// passes all test cases on leetcode
+
+// time complexity: O()
+// space complexity: O()
+
+
+
+
+// LEETCODE #309 - Best time to buy and sell stock with cooldown
+
+/*
+
+*/
+
+// passes all test cases on leetcode
+
+// time complexity: O()
+// space complexity: O()
+
+
+
+
+// LEETCODE #714 - Best time to buy and sell stock with transaction fee
+
+/*
+
+*/
+
+// passes all test cases on leetcode
+
+// time complexity: O()
+// space complexity: O()
