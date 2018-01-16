@@ -71,7 +71,12 @@ var maxProfit = function(prices) {
 // LEETCODE #123 - Best time to buy and sell stock III
 
 /*
+Say you have an array for which the ith element is the price of a given stock on day i.
 
+Design an algorithm to find the maximum profit. You may complete at most two transactions.
+
+Note:
+You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
 */
 
 // passes all test cases on leetcode
@@ -86,7 +91,12 @@ var maxProfit = function(prices) {
 // LEETCODE #188 - Best time to buy and sell stock IV
 
 /*
+Say you have an array for which the ith element is the price of a given stock on day i.
 
+Design an algorithm to find the maximum profit. You may complete at most k transactions.
+
+Note:
+You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
 */
 
 // passes all test cases on leetcode
@@ -100,7 +110,18 @@ var maxProfit = function(prices) {
 // LEETCODE #309 - Best time to buy and sell stock with cooldown
 
 /*
+Say you have an array for which the ith element is the price of a given stock on day i.
 
+Design an algorithm to find the maximum profit. You may complete as many transactions as you like 
+(ie, buy one and sell one share of the stock multiple times) with the following restrictions:
+
+You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)
+Example:
+
+prices = [1, 2, 3, 0, 2]
+maxProfit = 3
+transactions = [buy, sell, cooldown, buy, sell]
 */
 
 // passes all test cases on leetcode
@@ -114,7 +135,13 @@ var maxProfit = function(prices) {
 // LEETCODE #714 - Best time to buy and sell stock with transaction fee
 
 /*
+Your are given an array of integers prices, for which the i-th element is the price 
+of a given stock on day i; and a non-negative integer fee representing a transaction fee.
 
+You may complete as many transactions as you like, but you need to pay the transaction 
+fee for each transaction. You may not buy more than 1 share of a stock at a time (ie. you must sell the stock share before you buy again.)
+
+Return the maximum profit you can make.
 */
 
 // passes all test cases on leetcode
