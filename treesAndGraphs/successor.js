@@ -24,7 +24,31 @@ function BinarySearchTree() {
 }
 
 BinarySearchTree.prototype.findInOrderSuccessor = function(inputNode) {
-    // your code goes here
+		// if inputNode has a right child
+		// successor is leftmost node of right subtree
+    if (inputNode.right !== null) {
+    	return findMinKeyWithinTree(inputNode.right);
+    }
+    // traverse up through tree until reaching the first parent of a left child
+    // this parent is the successor
+    // if this doesn't happen, return null
+    let result = null;
+    let currentNode = inputNode;
+    while (currentNode.parent !== null) {
+    	if (currentNode.parent.key > inputNode.key) {
+    		result = currentNode.parent;
+    		break;
+    	}
+    	currentNode = currentNode.parent;
+    }
+    return result;
+}
+
+const findMinKeyWithinTree = (inputNode) => {
+	while (inputNode.left !== null) {
+		inputNode = inputNode.left;
+	}
+	return inputNode;
 }
 
 // Creates a new node by a key and inserts it to the BST
@@ -87,11 +111,16 @@ BinarySearchTree.prototype.getNodeByKey = function(key) {
     return null;
 }
 
-/*********************************************
- * Driver program to test above function     *
- *********************************************/
+// tests:
 
-// Create a Binary Search Tree
+const assertEquals = (actual, expected, testname) => {
+	if (actual === expected) {
+		console.log(`passed ${testname}`);
+	} else {
+		console.log(`FAILED ${testname}: expected ${expected}, but got ${actual}`);
+	}
+};
+
 var bst = new BinarySearchTree();
 bst.insert(20);
 bst.insert(9);
@@ -101,17 +130,18 @@ bst.insert(12);
 bst.insert(11);
 bst.insert(14);
 
-// Get a reference to the node whose key is 9
-var test = bst.getNodeByKey(9);
+const test0 = bst.getNodeByKey(9);
+const result0 = bst.findInOrderSuccessor(test0);
+assertEquals(result0.key, 11, 'should return leftmost node in right subtree when input node has right child');
 
-// Find the in order successor of test
-var succ = test ? bst.findInOrderSuccessor(test) : null;
+const test1 = bst.getNodeByKey(5);
+const result1 = bst.findInOrderSuccessor(test1);
+assertEquals(result1.key, 9, 'should return parent when inputNode has no right child and is left child of parent');
 
-// Print the key of the successor node
-if(succ) {
-    console.log("Inorder successor of " + test.key + " is " + succ.key);
-} else {
-    console.log("Inorder successor does not exist");
-}
+const test2 = bst.getNodeByKey(14);
+const result2 = bst.findInOrderSuccessor(test2);
+assertEquals(result2.key, 20, 'should return first parent of a left child in ancestry tree when input node has no right child and is a right child');
 
-
+const test3 = bst.getNodeByKey(25);
+const result3 = bst.findInOrderSuccessor(test3);
+assertEquals(result3, null, 'should return null when there is no inOrderSuccessor');
