@@ -100,3 +100,61 @@ TwoSum.prototype.find = function(value) {
     }
     return false;
 };
+
+// Leetcode #653 - Two Sum IV - input is a BST
+
+/*
+Given a Binary Search Tree and a target number, return true if there exist two elements in the BST such that their sum is equal to the given target.
+
+Example 1:
+Input: 
+    5
+   / \
+  3   6
+ / \   \
+2   4   7
+
+Target = 9
+
+Output: True
+Example 2:
+Input: 
+    5
+   / \
+  3   6
+ / \   \
+2   4   7
+
+Target = 28
+
+Output: False
+*/
+
+// passes all tests on leetcode
+var findTarget = function(root, k) {
+    const values = [];
+    inOrder(x => values.push(x), root); // values is now a sorted arr of values from BST
+    // same approach as before:
+    let firstIndex = 0;
+    let secondIndex = values.length - 1;
+    while(firstIndex < secondIndex) {
+        let sum = values[firstIndex] + values[secondIndex];
+        if (sum === k) {
+            return true;
+        } else if (sum < k) {
+            firstIndex++;
+        } else if (sum > k) {
+            secondIndex--;
+        }
+    }
+    return false;
+};
+
+// in order traversal of BST
+var inOrder = function(cb, curr) {
+    if (curr !== null) {
+        inOrder(cb, curr.left);
+        cb(curr.val);
+        inOrder(cb, curr.right);
+    }
+};
