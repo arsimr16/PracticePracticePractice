@@ -93,4 +93,32 @@ var singleNumber = function(nums) {
 
 
 
-// leet code # 
+// leet code # 268 - missing number
+
+/*
+Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+
+Example 1
+
+Input: [3,0,1]
+Output: 2
+Example 2
+
+Input: [9,6,4,2,3,5,7,0,1]
+Output: 8
+
+Note:
+Your algorithm should run in linear runtime complexity. Could you implement it using only constant extra space complexity?
+*/
+
+// passes all tests on leetcode
+var missingNumber = function(nums) {
+    const actualSum = nums.reduce((a, b) => a + b);
+    let expectedSum = 0;
+    let i = nums.length;
+    while(i > 0) {
+        expectedSum += i;
+        i--;
+    }
+    return expectedSum - actualSum;
+};
