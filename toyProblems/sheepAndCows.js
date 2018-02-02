@@ -1,10 +1,9 @@
 /*
 You are given a grid that represents a field.  Each space in the grid is a space the field.
 Spaces are marked as either having grass ('Y') or not having grass ('N');
-e.g. [ YNNY,
-       NNNY,
-       YYNN,
-       NNNN ]
+e.g. [ 'YNNY',
+       'NYNY',
+       'YYNN']
 Adjacent patches of grass are considered part of the same pen.
 In the above example there are 3 pens.
 
@@ -42,47 +41,19 @@ the output for this example should be 4
 
 // return NUMBER of possible unique combinations that have an even number of sheep
 function Group(grid) {
-    let results = 0;
     // find number of fields
     const numOfFields = countFields(grid);
-    
-    // for testing countUniqueArrangements fn
-    console.log(countUniqueArrangements(3, 2)); // should return 3
-    //console.log(countUniqueArrangements(4, 2)); // should return 6
-    //console.log(countUniqueArrangements(5, 2)); // should return 10
-    
-    // invoke countUniqeArrangements with numOfFields and all even numbers from 0 to numOfFields (inclusive)
-    for (let i = 0; i <= numOfFields; i += 2) {
-        results += countUniqueArrangements(numOfFields, i);
+    // when numOfFields > 0
+    // number of unique combinations that have an even number of sheep = 2^numOfFields - 1
+    // this is because for each field there are two possibilities (feeding a sheep or a cow)
+    // for all combinations the result would be 2^n (2 * 2 * 2... for each field)
+    // however half of these have an even number of sheep and half don't
+    // therefore the result = 1/2 * 2^n
+    // this is equivalent to 2^n / 2^1 or 2^(n-1)
+    if (numOfFields === 0) {
+      return 0;
     }
-    return results;
-}
-
-// return num of uniqe arrangements for a given number of fields and a given number of sheep
-function countUniqueArrangements(fields, sheep) {
-    let results = 0;
-    // to get all unique arragements, for each field we can either have or not have a sheep
-    // write a recursive fn that does the following:
-    // build arrays where each index is a field
-    // try including a sheep and not including a sheep at that index; track the # of sheep already used
-    // if there are no sheep left and the length of the arr is <= fields
-        // this is a valid unique arrangement, update the result
-    function getArrangements(fields, sheep, currArrangement) {
-        console.log('currArrangement', currArrangement, 'sheep', sheep);
-        if (currArrangement.length <= fields && sheep === 0) {
-            console.log('newArrangement', currArrangement);
-            results++;
-        } else if (currArrangement.length < fields && sheep > 0) {
-            // do not include sheep
-            currArrangement[currArrangement.length] = 'cow';
-            getArrangements(fields, sheep, currArrangement);
-            // do include sheep
-            currArrangement[currArrangement.length - 1] = 'sheep';
-            getArrangements(fields, sheep - 1, currArrangement);
-        }
-    }
-    getArrangements(fields, sheep, []);
-    return results;
+    return Math.pow(2, numOfFields - 1);
 }
 
 // return number of unique fields in a grid
@@ -118,3 +89,41 @@ function checkCell(grid, i, j) {
         }
     }
 }
+
+const assertEquals = (actual, expected, testname) => {
+  if (actual === expected) {
+    console.log(`passed ${testname}`);
+  } else {
+    console.log(`FAILED ${testname}: expected ${expected}, but got ${actual}`);
+  }
+};
+
+// tests for countFields helper function
+const grid0 = [''];
+const grid1 = ['NNN', 'NNN', 'NNN'];
+const grid2 = ['NNN', 'NNY', 'NNN'];
+const grid3 = ['NNN', 'YYY', 'NNN'];
+const grid4 = ['NYN', 'NYN', 'NYN'];
+const grid5 = ['YNN', 'NYN', 'NNN'];
+const grid6 = ['YNNY', 'NYNY', 'YYNN'];
+assertEquals(countFields(grid0), 0, 'should return 0 when grid is empty');
+assertEquals(countFields(grid1), 0, 'should return 0 when there are no patches of grass');
+assertEquals(countFields(grid2), 1, 'should find a single field in a grid');
+assertEquals(countFields(grid3), 1, 'should count patches of grass in same row as 1 field');
+assertEquals(countFields(grid4), 1, 'should count patches of grass in same column as 1 field');
+assertEquals(countFields(grid5), 2, 'should count diagonal patches of grass as separate fields');
+assertEquals(countFields(grid6), 3, 'should return correct number of fields');
+
+// tests for main group function
+const grid7 = ['N'];
+const grid8 = ['Y'];
+const grid9 = ['YN', 'NY'];
+const grid10 = ['YNYNY'];
+const grid11 = ['YNNY', 'NNNN', 'YNNY'];
+const grid12 = ['YNNY', 'NYYN', 'YNNY'];
+assertEquals(Group(grid7), 0, 'should return correct num of combinations when there are no fields');
+assertEquals(Group(grid8), 1, 'should return correct num of combinations when there is 1 fields');
+assertEquals(Group(grid9), 2, 'should return correct num of combinations when there are 2 fields');
+assertEquals(Group(grid10), 4, 'should return correct num of combinations when there are 3 fields');
+assertEquals(Group(grid11), 8, 'should return correct num of combinations when there are 4 fields');
+assertEquals(Group(grid12), 16, 'should return correct num of combinations when there are 5 fields');
