@@ -1,42 +1,33 @@
 // given a str, write a fn to check if it is a permutation of a palidrome
 // the palindrome does not need to be limited to just dictionary words
 
-// basically the question is asking if an input string can be rearranged into a palindrome
+// i.e. can input string be rearranged into a palindrome
 
-// I: a string
-// O: a boolean
+// I: string
+// O: boolean
 // C: none
-// E: empty string counts as a palindrome, ignore spaces, ignore case
+// E: empty str is palindrome; handle even and odd length strings; ignore case, whitespace, non-alphabet chars
 
-const isPalindromePermutation = (str) => {
-	// remove spaces
-	str = str.replace(/ /g, '');
-	// ignore case
-	str = str.toLowerCase();
-	// quick check to potentially save time
-	if (str.length <= 1) {
-		return true;
-	}
-	// find char frequency of all chars
+const isPalindromePermutation = str => {
+	str = str.toLowerCase().replace(/[^a-z]/g, '');
 	const chars = {};
-	for (let i = 0; i < str.length; i += 1) {
-		chars.hasOwnProperty(str[i]) ? chars[str[i]] += 1 : chars[str[i]] = 1;
+	for (let char of str) {
+		chars[char] ? chars[char]++ : chars[char] = 1;
 	}
 	let result = true;
-	// if str length is even, all chars must have an even frequency
 	if (str.length % 2 === 0) {
-		Object.values(chars).forEach((charCount) => {
+		Object.values(chars).forEach(charCount => {
 			if (charCount % 2 !== 0) {
 				result = false;
 			}
 		});
-	// if str length is odd, only one char can have an odd frequency
 	} else {
-		let odds = 0; 
-		Object.values(chars).forEach((charCount) => {
+		let oddAllowed = true;
+		Object.values(chars).forEach(charCount => {
 			if (charCount % 2 !== 0) {
-				odds += 1;
-				if (odds >= 2) {
+				if (oddAllowed) {
+					oddAllowed = false;
+				} else {
 					result = false;
 				}
 			}
@@ -46,10 +37,8 @@ const isPalindromePermutation = (str) => {
 };
 
 // time complexity: O(n)
-// space complexity: O(n)
+// space complexity: O(n) 
 
-
-// tests
 const assertEquals = (actual, expected, testname) => {
 	if (actual === expected) {
 		console.log(`passed ${testname}`);
@@ -58,10 +47,10 @@ const assertEquals = (actual, expected, testname) => {
 	}
 };
 
-assertEquals(isPalindromePermutation('racecar'), true, 'should return true when given a palindrom');
-assertEquals(isPalindromePermutation('arcecra'), true, 'should return true when given a permutation of a palindrome');
-assertEquals(isPalindromePermutation('arc ecra'), true, 'should ignore spaces');
-assertEquals(isPalindromePermutation('racecars'), false, 'should return false when string is not a permutation of a palindrome');
-assertEquals(isPalindromePermutation(''), true, 'should return true when passed an empty string');
-assertEquals(isPalindromePermutation('a'), true, 'should return true when passed an single character');
-assertEquals(isPalindromePermutation('RaceCar'), true, 'should ignore case');
+assertEquals(isPalindromePermutation('racecar'), true, 'palindrome');
+assertEquals(isPalindromePermutation('arcecra'), true, 'palindrome permutation');
+assertEquals(isPalindromePermutation('aRc eCra.-'), true, 'palindrome permutation with uppercase and non-alphabet chars');
+assertEquals(isPalindromePermutation('racecars'), false, 'not palindrome permutation');
+assertEquals(isPalindromePermutation(''), true, 'empty string');
+assertEquals(isPalindromePermutation('a'), true, 'single character');
+assertEquals(isPalindromePermutation('aa'), true, 'double character');

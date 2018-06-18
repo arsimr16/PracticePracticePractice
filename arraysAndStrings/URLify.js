@@ -4,27 +4,20 @@
 // O: a string with no spaces (spaces replaced with '%20')
 // C: none
 // E: an empty string returns and empty string, a string with no spaces does not change
+const urlify = (str) => str.replace(/ /g, '%20');
 
-const replaceSpaces = (str) => {
-	return str.replace(/ /g, '%20');
-};
+// time complexity: O(n)? depends on implementation details of str.replace() 
+// since strings are immutable in JS, I'm not exactly sure how this works under the hood
+// space complexity: also depends on implementation details, but my guess is O(n)
 
-// time complexity: O(n) ?
-// space complexity: O(n) ?
-// I'm not sure about how regex works under the hood in JS
-// The time complexity cannot be any better than linear because the function needs to check every character
-// Since strings are not mutable in JS, I'm not sure how this works.  It might have to create copies of the string everytime a char is replaced
-// I still think this would be linear time because we would drop the coefficient (number of time we iterate through str)
-
-// tests
-const assertEquals = (actual, expected, testname) => {
+const assertEquals = (actual, expected, testName) => {
 	if (actual === expected) {
-		console.log(`passed ${testname}`);
+		console.log(`passed ${testName}`);
 	} else {
-		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
+		console.log(`FAILED ${testName}: expected "${expected}", but got "${actual}".`);
 	}
 };
 
-assertEquals(replaceSpaces('alex'), 'alex', 'should not mutate a string with no spaces');
-assertEquals(replaceSpaces('alex  '), 'alex%20%20', 'should replace consecutive spaces with %20 for each space');
-assertEquals(replaceSpaces(' a l e x '), '%20a%20l%20e%20x%20', 'should replace all spaces with %20');
+assertEquals(urlify('alex'), 'alex', 'string with no spaces');
+assertEquals(urlify(' a l e x '), '%20a%20l%20e%20x%20', 'multiple spaces');
+assertEquals(urlify('alex  '), 'alex%20%20', 'consecutive spaces');

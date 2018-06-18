@@ -1,54 +1,51 @@
 // given two strings, write a method to decide if one is a permutation of the other
 
-// I: two strings
-// O: a boolean
+// I: 2 strings
+// O: boolean
 // C: none
-// E: should ignore case, should not ignore spaces
-
+// E: treat spaces and punctuation diff cases as uniq chars;
 const isPermutation = (str1, str2) => {
-	// if the strings are not equal in length, they cannot be permutations
-	if (str1.length !== str2.length) {
-		return false;
-	}
-	// ignore case
-	str1 = str1.toLowerCase();
-	str2 = str2.toLowerCase();
-	// quick check to see whether the strings are equal to potentially save time
-	if (str1 === str2) {
-		return true
-	}
-	// get char frequecy of all chars for both strings
-	const str1Chars = {};
-	const str2Chars = {};
-	for (let i = 0; i < str1.length; i += 1) {
-		str1Chars.hasOwnProperty(str1[i]) ? str1Chars[str1[i]] += 1 : str1Chars[str1[i]] = 1;
-		str2Chars.hasOwnProperty(str2[i]) ? str2Chars[str2[i]] += 1 : str2Chars[str2[i]] = 1;
-	}
-	// compare char frequencies
-	for (let char in str1Chars) {
-		if (str1Chars[char] !== str2Chars[char]) {
-			return false;
-		}
-	}
-	return true;
-};
+	return str1.split('').sort().join('') === str2.split('').sort().join('');
+}
 
-// time complexity: O(nm) where n and m are the lengths of the two strings
-// space complexity: O(nm) where n and m are the lengths of the two strings
+// time complexity: O(n log n)
+// space complexity: O(n)
 
-// tests
+// above solution is less optimal, but very simple and easy to implement
+
+// const isPermutation = (str1, str2) => {
+// 	if (str1.length !== str2.length) {
+// 		return false;
+// 	}
+// 	const str1Chars = {};
+// 	for (let char of str1) {
+// 	  str1Chars[char] ? str1Chars[char]++ : str1Chars[char] = 1;
+// 	}
+// 	for (let char of str2) {
+// 		if (!str1Chars[char] || str1Chars[char] === 0) {
+// 			return false;
+// 		} else {
+// 			str1Chars[char]--;
+// 		}
+// 	}
+// 	return true;
+// };
+
+// time complexity: O(n)
+// space complexity: O(n)
+
 const assertEquals = (actual, expected, testName) => {
-  if (actual === expected) {
-  	console.log(`passed ${testName}`);
-  } else {
-  	console.log(`FAILED ${testName}: expected "${expected}", but got "${actual}"`);
-  }
+	if (actual === expected) {
+		console.log(`passed ${testName}`);
+	} else {
+		console.log(`FAILED ${testName}: expected "${expected}", but got "${actual}".`);
+	}
 };
 
-assertEquals(isPermutation('cat', 'cat'), true, 'should return true when the strings are equal');
-assertEquals(isPermutation('cats', 'cat'), false, 'should return false when strings are not equal length');
-assertEquals(isPermutation('cats', 'ca ts'), false, 'should not ignore spaces');
-assertEquals(isPermutation('c ats', 'cats '), true, 'should not ignore spaces');
-assertEquals(isPermutation('Cat', 'cat'), true, 'should ignore case');
-assertEquals(isPermutation('cat', 'act'), true, 'should return true when strings are permutations of each other');
-assertEquals(isPermutation('cat', 'cut'), false, 'should return false when strings are not permutations of each other');
+console.log('#isPermutation()');
+assertEquals(isPermutation('cat', 'cat'), true, 'equal strings');
+assertEquals(isPermutation('cat', 'cat '), false, 'equal except space');
+assertEquals(isPermutation('c ats', 'cats '), true, 'equal with spaces');
+assertEquals(isPermutation('Cat', 'cat'), false, 'case-sensitivity');
+assertEquals(isPermutation('cat', 'act'), true, 'permutations');
+assertEquals(isPermutation('cat', 'cut'), false, 'not permutations');
