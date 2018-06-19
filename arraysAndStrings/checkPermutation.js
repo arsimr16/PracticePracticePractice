@@ -6,7 +6,7 @@
 // E: treat spaces and punctuation diff cases as uniq chars;
 const isPermutation = (str1, str2) => {
 	return str1.split('').sort().join('') === str2.split('').sort().join('');
-}
+};
 
 // time complexity: O(n log n)
 // space complexity: O(n)

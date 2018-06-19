@@ -5,30 +5,33 @@
 // I: two strings
 // O: a boolean
 // C: none
-// E: do not ignore spaces, do not ignore capital letters, should handle empty strings
-
+// E: true if strings are equal, do not ignore spaces, do not ignore capital letters, should handle empty strings
 const areOneAway = (str1, str2) => {
-	if (str1.length === str2.length) {
-		let edits = 0;
-		for (let i = 0; i < str1.length; i += 1) {
-			if (str1[i] !== str2[i]) {
-				edits += 1;
-				if (edits >= 2) {
-					return false;
-				}
-			}
-		}
-		return true;
-	} else if (Math.abs(str1.length - str2.length) <= 1) {
-		const longer = str1.length > str2.length ? str1 : str2;
-		const shorter = str1.length < str2.length ? str1 : str2;
-		for (let i = 0; i < longer.length; i += 1) {
-			if (longer.slice(0, i) + longer.slice(i + 1) === shorter) {
-				return true;
-			}
-		}
-	}
-	return false;
+	const lengthDiff = Math.abs(str1.length - str2.length);
+  if (lengthDiff === 0) {
+  	let diffs = 0;
+  	for (let i = 0; i < str1.length; i++) {
+  		if (str1[i] !== str2[i]) {
+  			diffs++;
+  			if (diffs > 1) {
+  				return false;
+  			}
+  		}
+  	}
+  	return true;
+  } else if (lengthDiff === 1) {
+  	const longer = str1.length > str2.length ? str1 : str2;
+  	const shorter = str1.length < str2.length ? str1 : str2;
+  	for (let i = 0; i < longer.length; i++) {
+  		const longerMinusCurrChar = longer.slice(0, i) + longer.slice(i + 1, longer.length);
+  		if (longerMinusCurrChar === shorter) {
+  			return true
+  		}
+  	}
+  	return false;
+  } else {
+  	return false;
+  }
 };
 
 // time complexity: O(n)
@@ -43,12 +46,12 @@ const assertEquals = (actual, expected, testname) => {
 	}
 };
 
-assertEquals(areOneAway('cat', 'cat'), true, 'should return true when both strings are equal');
-assertEquals(areOneAway('cat', 'can'), true, 'should return true when one letter is replaced');
-assertEquals(areOneAway('cat', 'chat'), true, 'should return true when one letter is added');
-assertEquals(areOneAway('chat', 'cat'), true, 'should return true when one letter is removed');
-assertEquals(areOneAway('cat', 'it'), false, 'should return false when more than one edit away');
-assertEquals(areOneAway('cat', 'tac'), false, 'should return false when strings are permutations of each other with more than one edit')
-assertEquals(areOneAway('cat', 'CAT'), false, 'should treat capital letters separately');
-assertEquals(areOneAway('ca t', 'cat '), false, 'should count spaces as edits');
-assertEquals(areOneAway('', ' '), true, 'should handle empty strings');
+assertEquals(areOneAway('cat', 'cat'), true, 'equal strings');
+assertEquals(areOneAway('cat', 'can'), true, 'one letter replaced');
+assertEquals(areOneAway('cat', 'chat'), true, 'one letter added');
+assertEquals(areOneAway('chat', 'cat'), true, 'one letter removed');
+assertEquals(areOneAway('cat', 'it'), false, 'more than one edit away');
+assertEquals(areOneAway('cat', 'tac'), false, 'strings are permutations with more than one edit')
+assertEquals(areOneAway('cat', 'CAT'), false, 'case-sensitive');
+assertEquals(areOneAway('ca t', 'cat '), false, 'whitespace');
+assertEquals(areOneAway('', ' '), true, 'empty strings');

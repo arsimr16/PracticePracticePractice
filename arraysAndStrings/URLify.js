@@ -4,7 +4,7 @@
 // O: a string with no spaces (spaces replaced with '%20')
 // C: none
 // E: an empty string returns and empty string, a string with no spaces does not change
-const urlify = (str) => str.replace(/ /g, '%20');
+const urlify = str => str.replace(/ /g, '%20');
 
 // time complexity: O(n)? depends on implementation details of str.replace() 
 // since strings are immutable in JS, I'm not exactly sure how this works under the hood

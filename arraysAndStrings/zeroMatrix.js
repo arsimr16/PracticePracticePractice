@@ -3,32 +3,42 @@
 // I: a matrix
 // O: matrix with rows and columns containing 0 all set to 0
 // C: none
-// E: the rows and columns are only affected by original 0s (otherwise if there were any 0s, the whole matrix would end up being 0)
+// E: the rows and columns are only affected by original 0s 
+// (otherwise if there were any 0s, the whole matrix would end up being 0)
 
-const zeroMatrix = (matrix) => {
-	// size of matrix
-	const n = matrix[0].length;
-	// track which rows and columns have a zero
+const zeroMatrix = matrix => {
+	const n = matrix.length;
 	const rows = Array(n).fill(false);
 	const cols = Array(n).fill(false);
-	for (let row = 0; row < n; row += 1) {
-		for (let col = 0; col < n; col += 1) {
-			if (matrix[row][col] === 0) {
-				rows[row] = true;
-				cols[col] = true;
+	for (let r = 0; r < n; r++) {
+		for (let c = 0; c < n; c++) {
+			if (matrix[r][c] === 0) {
+				rows[r] = true;
+				cols[c] = true;
 			}
 		}
 	}
-	// iterate through matrix
-	for (let row = 0; row < n; row += 1) {
-		for (let col = 0; col < n; col += 1) {
-			if (rows[row] || cols[col]) {
-				matrix[row][col] = 0;
+
+	for (let r = 0; r < n; r++) {
+		for (let c = 0; c < n; c++) {
+			if (rows[r] || cols[c]) {
+				matrix[r][c] = 0;
 			}
 		}
 	}
 	return matrix;
 };
+
+const rowHasZero = row => row.includes(0);
+
+const colHasZero = (col, matrix) => {
+	for (let row = 0; row < matrix.length; row++) {
+		if (row[col] === 0) {
+			return true;
+		}
+	}
+	return false;
+}
 
 // time complexity: O(n^2)
 // space complexity: O(n)

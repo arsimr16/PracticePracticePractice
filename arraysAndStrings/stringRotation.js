@@ -9,14 +9,6 @@
 // E: empty strings, spaces, equal strings
 
 const stringRotation = (s1, s2) => {
-	// if lengths are not equal, strings can not be rotations of each other
-	if (s1.length !== s2.length) {
-		return false;
-	}
-	// if strings are equal, return true
-	if (s1 === s2) {
-		return true;
-	}
 	const double = s1.concat(s1);
 	return isSubstring(double, s2);
 };
@@ -27,9 +19,7 @@ const stringRotation = (s1, s2) => {
 // E: empty strings -> index of '' in 'aNon-emptyString' === 0
 
 // determine if s2 is a substring of s1
-const isSubstring = (s1, s2) => {
-	return s1.indexOf(s2) !== -1;
-};
+const isSubstring = (s1, s2) => s1.indexOf(s2) !== -1;
 
 const assertEquals = (actual, expected, testname) => {
 	if (actual === expected) {
