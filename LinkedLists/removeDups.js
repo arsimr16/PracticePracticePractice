@@ -1,5 +1,6 @@
-// write code to remove duplicates from an unsorted linked list
+// remove duplicates from unsorted linked list
 // how would you solve this problem if a temporary buffer is not allowed?
+
 
 class LinkedList {
 	constructor() {
@@ -13,10 +14,10 @@ class LinkedList {
 
 	addToTail(value) {
 		const newTail = this.makeNode(value);
-		if (!this.head) {
+		if (this.head === null) {
 			this.head = newTail;
 		}
-		if (this.tail) {
+		if (this.tail !== null) {
 			this.tail.next = newTail;
 		}
 		this.tail = newTail;
@@ -38,20 +39,18 @@ class LinkedList {
 	// E: if tail is removed, update LinkedList pointer to tail
 	removeDups() {
 		let curr = this.head;
-		let uniq = {};
-		uniq[this.head.value] = true;
-		while(curr && curr.next) {
-			// if next value is not unique
-			if (uniq[curr.next.value]) {
-				// if removed value is tail, update pointer to tail
-				if (!curr.next.next) {
+		const uniqueNodes = {};
+		uniqueNodes[curr.value] = true;
+		while (curr.next !== null) {
+			if (uniqueNodes[curr.next.value]) {
+				if (curr.next.next === null) {
 					this.tail = curr;
 					this.tail.next = null;
 				} else {
 					curr.next = curr.next.next;
 				}
 			} else {
-				uniq[curr.next.value] = true;
+				uniqueNodes[curr.next.value] = true;
 				curr = curr.next;
 			}
 		}
