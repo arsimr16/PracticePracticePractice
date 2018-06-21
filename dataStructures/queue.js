@@ -86,6 +86,31 @@ class QueueObj {
 	}
 }
 
+// implemented with JS Map object
+class QueueMap {
+	constructor() {
+		this.queue = new Map();
+	}
+
+	// does not add duplicates
+	add(item) {
+		this.queue.set(item, item);
+	}
+
+	remove() {
+		const keys = this.queue.keys();
+		this.queue.delete(keys.next().value);
+	}
+
+	peek() {
+		return this.queue.keys().next().value; 
+	}
+
+	isEmpty() {
+		return this.queue.size === 0;
+	}
+}
+
 const assertDeepEquals = (actual, expected, testname) => {
 	if (JSON.stringify(actual) === JSON.stringify(expected)) {
 		console.log(`passed ${testname}`);
@@ -165,3 +190,5 @@ queueValues.push(testQ1.queue[2]);
 queueValues.push(testQ1.queue[3]);
 assertDeepEquals(queueValues, [1, 2, 3, 4], 'queue should contain correct values in order');
 assertDeepEquals(testQ1.queue[4], undefined, 'queue[size], should be undefined');
+
+// TODO: add tests for QueueMap
