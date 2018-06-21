@@ -7,15 +7,15 @@ class LinkedList {
 	}
 
 	makeNode(value) {
-		return {value, next: null };
+		return { value, 'next': null };
 	}
 
 	addToTail(value) {
 		const newTail = this.makeNode(value);
-		if (!this.head) {
+		if (this.head === null) {
 			this.head = newTail;
 		}
-		if (this.tail) {
+		if (this.tail !== null) {
 			this.tail.next = newTail;
 		}
 		this.tail = newTail;
@@ -23,34 +23,39 @@ class LinkedList {
 
 	forEach(cb) {
 		let curr = this.head;
-		while(curr) {
-			cb(curr.value);
+		while(curr !== null) {
+			curr.value = cb(curr.value);
 			curr = curr.next;
 		}
 	}
-}
+};
 
-// I: a linked list
-// O: a boolean
-// C: none
-// E: even and odd numbered lists, empty lists, case-sensitive, 
-// assume values are strings or numbers, not booleans, objects, arrays, functions, etc.
-const isPalindrome = (list) => {
-	let values = [];
-	list.forEach(item => values.push(item));
-	return values.join('') === values.reverse().join('');
-	// an alternate approach without reverse() is more efficient, but I like how easy reverse() is to read and implement:
-	// while (i < Math.floor(values.length / 2)) {
-  //   if (values[i] === values[values.length - 1 - i]) {
-  //	   i += 1;
-  //   } else {
-  //     return false;
-  //   }
-  //   return true;
-	// }
+// I: a lined list, each value is an alphabetic char
+// O: boolean indicating if word is palindrome
+// C: none (assume singly-linked list)
+// E: handle even and odd lengths; case-sensitive; 
+const isPalindrome = list => {
+	const letters = [];
+	list.forEach(letter => letters.push(letter));
+	return letters.join('') === letters.reverse().join('');
 };
 // time complexity: O(n) ? maybe O(n^2), I'm not sure about the time complexity of reverse()
 // space complexity: O(n)
+
+// more efficient, but less clean solution:
+// const isPalindrome = list => {
+// 	const letters = [];
+// 	list.forEach(letter => letters.push(letter));
+// 	let i = 0;
+// 	while (i < Math.floor(letters.length / 2)) {
+//     if (letters[i] === letters[letters.length - 1 - i]) {
+//   	   i += 1;
+//     } else {
+//       return false;
+//     }
+// 	}
+// 	return true;
+// };
 
 // tests
 const assertEquals = (actual, expected, testname) => {

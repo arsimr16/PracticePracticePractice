@@ -15,15 +15,15 @@ class LinkedList {
 	}
 
 	makeNode(value) {
-		return { value, next: null };
+		return {value, next: null };
 	}
 
 	addToTail(value) {
 		const newTail = this.makeNode(value);
-		if (!this.head) {
+		if (this.head === null) {
 			this.head = newTail;
 		}
-		if (this.tail) {
+		if (this.tail !== null) {
 			this.tail.next = newTail;
 		}
 		this.tail = newTail;
@@ -31,42 +31,38 @@ class LinkedList {
 
 	forEach(cb) {
 		let curr = this.head;
-		while(curr) {
-			cb(curr.value);
+		while(curr !== null) {
+			curr.value = cb(curr.value);
 			curr = curr.next;
 		}
 	}
 }
 
-
-// I: two linked lists, digits in reverse order
-// O: a linked list containing sum digits in reverse order
+// I: two linked lists, digits of a number in reverse order
+// O: a new linked list - sum of input lists with digits in reverse order
 // C: none
-// E: empty list, numbers not same length, assume only positive integers
+// E: lists are diff lengths, assume only whole numbers greater than or equal to 0
 const sumListsReverse = (l1, l2) => {
-	let result = new LinkedList;
+	result = new LinkedList();
+	let carryOver = 0;
 	let curr1 = l1.head;
 	let curr2 = l2.head;
-	let remainder = 0;
-	while (curr1 || curr2 || remainder) {
-		let val1 = curr1 ? curr1.value : 0;
-		let val2 = curr2 ? curr2.value : 0;
-		let sum = val1 + val2 + remainder;
-		if (sum >= 10) {
-			sum -= 10;
-			remainder = 1;
+	while(curr1 !== null || curr2 !== null || carryOver !== 0) {
+		let val1 = curr1 !== null ? curr1.value : 0;
+		let val2 = curr2 !== null ? curr2.value : 0;
+		let sum = val1 + val2 + carryOver;
+		if (sum > 9) {
+			result.addToTail(sum - 10);
+			carryOver = 1;
 		} else {
-			remainder = 0;
+			result.addToTail(sum);
+			carryOver = 0;
 		}
-		result.addToTail(sum);
-		curr1 = curr1 ? curr1.next : 0;
-		curr2 = curr2 ? curr2.next : 0;
+		curr1 = curr1 !== null ? curr1.next : null;
+		curr2 = curr2 !== null ? curr2.next : null;
 	}
 	return result;
-}
-// time complexity: O(n) where n is length of longer list
-// space complexity: O(n) where n is length of sum
-
+};
 
 // I: two linked lists, digits in forward order
 // O: a linked lists containing sum digits in forward order
@@ -135,35 +131,35 @@ reverseSum2.forEach(item => result2.push(item));
 
 assertDeepEquals(result2, [8, 9, 1], 'should carry remainder of highest place value');
 
-console.log('');
-console.log('TESTS FOR SUMLISTS()');
+// console.log('');
+// console.log('TESTS FOR SUMLISTS()');
 
-const sum0 = sumLists(list1, list2);
-const result3 = [];
-sum0.forEach(item => result.push(item));
+// const sum0 = sumLists(list1, list2);
+// const result3 = [];
+// sum0.forEach(item => result.push(item));
 
-assertDeepEquals(result3, [1, 3, 0, 8], 'should return sum of digits in forward order');
+// assertDeepEquals(result3, [1, 3, 0, 8], 'should return sum of digits in forward order');
 
-const sum1 = sumLists(list1, list3);
-const result4 = [];
-sum4.forEach(item => result4.push(item));
+// const sum1 = sumLists(list1, list3);
+// const result4 = [];
+// sum4.forEach(item => result4.push(item));
 
-assertDeepEquals(result4, [6, 6, 4, 4], 'shoudl return correct sum when lists are unequal in length');
+// assertDeepEquals(result4, [6, 6, 4, 4], 'shoudl return correct sum when lists are unequal in length');
 
-const sum2 = sumLists(list4, list4);
-const result5 = [];
-sum2.forEach(item => result5.push(item));
+// const sum2 = sumLists(list4, list4);
+// const result5 = [];
+// sum2.forEach(item => result5.push(item));
 
-assertDeepEquals(result2, [1, 9, 8], 'should carry remainder of highest place value');
+// assertDeepEquals(result2, [1, 9, 8], 'should carry remainder of highest place value');
 
-const sum3 = sumLists(list4, list5);
-const result6 = [9, 9];
-sum3.forEach(item => result6.push(item));
+// const sum3 = sumLists(list4, list5);
+// const result6 = [9, 9];
+// sum3.forEach(item => result6.push(item));
 
-assertDeepEquals(result6, [1, 9, 8], 'should work when one list is empty');
+// assertDeepEquals(result6, [1, 9, 8], 'should work when one list is empty');
 
-const sum4 = sumLists(list5, list5);
-const result7 = [9, 9];
-sum4.forEach(item => result7.push(item));
+// const sum4 = sumLists(list5, list5);
+// const result7 = [9, 9];
+// sum4.forEach(item => result7.push(item));
 
-assertDeepEquals(result7, [], 'should work when both lists is empty');
+// assertDeepEquals(result7, [], 'should work when both lists is empty');
