@@ -1,7 +1,7 @@
 // implementation of binary search tree with contains and depth-first traversal methods;
 
 class BST {
-	constructor() {
+	constructor () {
 		this.root = null;
 	}
 
@@ -11,22 +11,20 @@ class BST {
 
 	insert(value) {
 		const newNode = this.makeNode(value);
-		if (!this.root) {
+		if (this.root === null) {
 			this.root = newNode;
 			return;
 		}
-
 		let curr = this.root;
-		// do nothing if the value already exists in the tree
-		while(value !== curr.value) {
+		while(curr.value !== value) { // do not allow dups
 			if (value < curr.value) {
-				if (!curr.left) {
+				if (curr.left === null) {
 					curr.left = newNode;
 					break;
 				}
 				curr = curr.left;
 			} else if (value > curr.value) {
-				if (!curr.right) {
+				if (curr.right === null) {
 					curr.right = newNode;
 					break;
 				}
@@ -36,50 +34,46 @@ class BST {
 	}
 
 	contains(target) {
-		if (!this.root) {
-			return;
-		}
 		let curr = this.root;
-		while(curr) {
+		while(curr !== null) {
 			if (curr.value === target) {
 				return true;
 			} else if (target < curr.value) {
 				curr = curr.left;
-			} else if (target > curr.value) {
+			} else {
 				curr = curr.right;
 			}
 		}
 		return false;
 	}
 
-	// left, value, right
+	// left, curr, right
 	inOrder(cb, curr = this.root) {
-    if (curr) {
-      this.inOrder(cb, curr.left);
-      cb(curr.value);
-      this.inOrder(cb, curr.right);
-    }
-  }
+		if (curr !== null) {
+			this.inOrder(cb, curr.left);
+			cb(curr.value);
+			this.inOrder(cb, curr.right);
+		}
+	}
 
-  // value, left, right
-  preOrder(cb, curr = this.root) {
-  	if (curr) {
-  		cb(curr.value);
-  		this.preOrder(cb, curr.left);
-  		this.preOrder(cb, curr.right);
-  	}
-  }
+	// curr, left, right
+	preOrder(cb, curr = this.root) {
+		if (curr !== null) {
+			cb(curr.value);
+			this.preOrder(cb, curr.left);
+			this.preOrder(cb, curr.right);
+		}
+	}
 
-  // left, right, value
-  postOrder(cb, curr = this.root) {
-  	if (curr) {
-  		this.postOrder(cb, curr.left);
-  		this.postOrder(cb, curr.right);
-  		cb(curr.value) 
-  	}
-  }
-}
-
+	// left, right, curr
+	postOrder(cb, curr = this.root) {
+		if (curr !== null) {
+			this.postOrder(cb, curr.left);
+			this.postOrder(cb, curr.right);
+			cb(curr.value);
+		}
+	}
+};
 
 // tests
 const assertDeepEquals = (actual, expected, testname) => {
