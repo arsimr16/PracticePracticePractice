@@ -65,6 +65,7 @@ class Queue {
 
 /*******************************************************/
 
+// undirected graph
 class Graph {
 	constructor() {
 		this.nodes = {};
@@ -74,42 +75,44 @@ class Graph {
 		this.nodes[value] = this.nodes[value] || { edges: {} };
 	}
 
-	contains(value) {
-		return !!this.nodes[value];
+	contains(target) {
+		return !!this.nodes[target];
 	}
 
-	removeNode(value) {
-		if (this.contains(value)) {
-			for (let targetNode in this.nodes[value].edges) {
-				this.removeEdge(value, targetNode);
+	removeNode(target) {
+		if (!!this.nodes[target]) {
+			const edges = this.nodes[target].edges;
+			for (let edge in edges) {
+				delete this.removeEdge(edge, target);
+				// for a directed graph you would need to iterate through all node's and edges
 			}
-			delete this.nodes[value];
+			delete this.nodes[target];
 		}
 	}
 
 	hasEdge(fromNode, toNode) {
-		if (!this.contains(fromNode)) {
-			return false;
+		if (!!this.nodes[fromNode]) {
+			return !!this.nodes[fromNode].edges[toNode];
 		}
-		return !!this.nodes[fromNode].edges[toNode];
+		return false;
 	}
 
 	addEdge(fromNode, toNode) {
-		if (this.contains(fromNode) && this.contains(toNode)) {
+		if (!!this.nodes[fromNode] && !!this.nodes[toNode]) {
 			this.nodes[fromNode].edges[toNode] = toNode;
-			this.nodes[toNode].edges[fromNode] = fromNode;
+			this.nodes[toNode].edges[fromNode] = fromNode; // remove for directed graph
 		}
 	}
 
 	removeEdge(fromNode, toNode) {
-		if (this.contains(fromNode) && this.contains(toNode)) {
+		if (this.hasEdge(fromNode, toNode)) {
 			delete this.nodes[fromNode].edges[toNode];
-			delete this.nodes[toNode].edges[fromNode];
+			delete this.nodes[toNode].edges[fromNode]; // remove for directed graph
 		}
 	}
 
 	forEachNode(cb) {
-		for (var node in this.nodes) {
+		for (let node in this.nodes) {
 			cb(node);
 		}
 	}
@@ -118,24 +121,20 @@ class Graph {
 		// TODO:
 	}
 
-	breadthFirst(node, cb) {
-		if (this.contains(node)) {
+	breadthFirst(startNode, cb) {
+		if (!!this.nodes[startNode]) {
 			const visited = {};
 			const toVisit = new Queue();
-			toVisit.add(node);
+			toVisit.add(startNode);
 			while(!toVisit.isEmpty()) {
-				let nextInQueue = toVisit.head.value;
-				// add direct neighbors that are not in queue or visited
-				for (let edge in this.nodes[nextInQueue].edges) {
+				let queueHead = toVisit.head.value;
+				for (let edge in this.nodes[queueHead].edges) {
 					if (!visited[edge] && !toVisit.contains(edge)) {
 						toVisit.add(edge);
 					}
 				}
-				// invoke callback on node
-				cb(nextInQueue);
-				// add node at front of queue to visited
-				visited[nextInQueue] = nextInQueue;
-				// remove node from queue
+				cb(queueHead);
+				visited[queueHead] = true;
 				toVisit.remove();
 			}
 		}

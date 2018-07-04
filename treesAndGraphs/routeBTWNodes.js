@@ -69,36 +69,32 @@ class DirectedGraph {
 		this.nodes[value] = this.nodes[value] || { edges: {} };
 	}
 
-	contains(value) {
-		return !!this.nodes[value];
-	}
-
-	removeNode(value) {
-		if (this.contains(value)) {
-			delete this.nodes[value];
-			for (let node in this.nodes) {
-				if (this.nodes[node].edges[value]) {
-					delete this.nodes[node].edges[value];
-				}
-			}
-		}
+	contains(target) {
+		return !!this.nodes[target];
 	}
 
 	hasEdge(fromNode, toNode) {
-		if (!this.contains([fromNode])) {
-			return false;
+		if (this.contains(fromNode)) {
+			return !!this.nodes[fromNode].edges[toNode];
 		}
-		return !!this.nodes[fromNode].edges[toNode];
+		return false;
 	}
 
 	addEdge(fromNode, toNode) {
 		if (this.contains(fromNode) && this.contains(toNode)) {
-			this.nodes[fromNode].edges[toNode] = toNode;
+			this.nodes[fromNode].edges[toNode] = true;
+		}
+	}
+
+	removeNode(target) {
+		delete this.nodes[target];
+		for (let node in this.nodes) {
+			delete this.nodes[node].edges[target];
 		}
 	}
 
 	removeEdge(fromNode, toNode) {
-		if (this.contains(fromNode) && this.contains(toNode)) {
+		if (this.hasEdge(fromNode, toNode)) {
 			delete this.nodes[fromNode].edges[toNode];
 		}
 	}
@@ -109,49 +105,32 @@ class DirectedGraph {
 		}
 	}
 
-	// I: start node, end node
-	// O: a boolean
-	// C: none (the graph is directed so we must traverse from start to end)
-	// E: either node does not exist; both nodes are the same;
-	areConnected(fromNode, toNode) {
-		// check that both nodes exist
-		if (this.contains(fromNode) && this.contains(toNode)) {
-			// quick check whether nodes are the same
-			if (fromNode === toNode) {
-				return true;
-			}
-			const visited = {};
-			const toVisit = new Queue();
-			toVisit.add(fromNode);
-			while(!toVisit.isEmpty()) {
-				let nextInQueue = toVisit.head.value;
-				for (let edge in this.nodes[nextInQueue].edges) {
-					// console.log('edge: ', edge);
-					// console.log('toNode: ', toNode);
-					if (edge.toString() === toNode.toString()) {
-						// console.log('edge = toNode');
-						return true;
-					}
-					// if (!toVisit.contains(edge)) {
-						// console.log('toVisit does not contain edge');
-					// }
-					if (!visited[edge] && !toVisit.contains(edge)) {
-						// console.log('add new edge');
-						toVisit.add(edge);
-						// console.log('toVisit: ', toVisit);
-					}
+	// I: two nodes in a directed graph
+	// O: a boolean: whether there is a path between two nodes
+	// C: none
+	// E: either node is not in graph, both nodes are same
+	areConnected(startNode, endNode) {
+		if (!this.contains(startNode) || !this.contains(endNode)) {
+			return false;
+		}
+		if (startNode === endNode) return true;
+		const visited = {};
+		const toVisit = new Queue();
+		toVisit.add(startNode);
+		while(!toVisit.isEmpty()) {
+			let queueHead = toVisit.peek();
+			for (let edge in this.nodes[queueHead].edges) {
+				if (edge.toString() === endNode.toString()) return true;
+				if (!visited[edge] && !toVisit.contains(edge)) {
+					toVisit.add(edge);
 				}
-				visited[nextInQueue] = nextInQueue;
-				toVisit.remove();
-				// console.log('to visit: ', toVisit);
-				// console.log('end of while, repeat');
 			}
+			visited[queueHead] = true;
+			toVisit.remove();
 		}
 		return false;
 	}
-	// time complexity: O(n)
-	// space complexity: O(n)
-}
+};
 
 /**************************************************************/
 
