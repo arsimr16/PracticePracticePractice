@@ -33,6 +33,14 @@ class BST {
 			}
 		}
 	}
+
+	getHeight(node = this.root) {
+		if (node === null) {
+			return -1;
+		} else {
+			return Math.max(this.getHeight(node.left), this.getHeight(node.right)) + 1;
+		}
+	}
 };
 
 // I: sorted array with increasing unique int elements
@@ -65,8 +73,6 @@ const assertEquals = (actual, expected, testname) => {
 	}
 };
 
-
-// TODO: write a function that returns the depth of a BST to make testing more efficient;
 const mt0 = minimalTree([2, 5, 6, 8, 9, 15, 17, 20, 23]);
 /*
 										9
@@ -78,12 +84,9 @@ const mt0 = minimalTree([2, 5, 6, 8, 9, 15, 17, 20, 23]);
 									 \       \
 										8      23
 */
-assertEquals(mt0.root.value, 9, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.left.value, 5, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.right.value, 17, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.left.left.value, 2, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.left.right.value, 6, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.right.left.value, 15, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.right.right.value, 20, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.left.right.right.value, 8, 'minimalTree contains correct values in correct positions');
-assertEquals(mt0.root.right.right.right.value, 23, 'minimalTree contains correct values in correct positions');
+const mt1 = minimalTree([5]);
+const mt2 = minimalTree([]);
+
+assertEquals(mt0.getHeight(), 3, 'creates BST with minimal height');
+assertEquals(mt1.getHeight(), 0, 'array with 1 value');
+assertEquals(mt2.getHeight(), -1, 'empty array');
