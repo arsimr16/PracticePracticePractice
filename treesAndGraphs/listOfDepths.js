@@ -12,16 +12,16 @@ class LinkedList {
 	}
 
 	addToTail(value) {
-		const newTail = this.makeNode(value);
-		if (!this.head) {
-			this.head = newTail;
+		const newNode = this.makeNode(value);
+		if (this.head === null) {
+			this.head = newNode;
 		}
-		if (this.tail) {
-			this.tail.next = newTail;
+		if (this.tail !== null) {
+			this.tail.next = newNode;
 		}
-		this.tail = newTail;
+		this.tail = newNode;
 	}
-}
+};
 
 class BST {
 	constructor() {
@@ -29,26 +29,25 @@ class BST {
 	}
 
 	makeNode(value) {
-		return { value, left: null, right: null };
+		return { value, right: null, left: null };
 	}
 
 	insert(value) {
 		const newNode = this.makeNode(value);
-		if (!this.root) {
+		if (this.root === null) {
 			this.root = newNode;
 			return;
 		}
-
 		let curr = this.root;
-		while (value !== curr.value) {
+		while(curr.value !== value) {
 			if (value < curr.value) {
-				if (!curr.left) {
+				if (curr.left === null) {
 					curr.left = newNode;
 					break;
 				}
 				curr = curr.left;
-			} else if (value > curr.value) {
-				if (!curr.right) {
+			} else {
+				if (curr.right === null) {
 					curr.right = newNode;
 					break;
 				}
@@ -57,9 +56,8 @@ class BST {
 		}
 	}
 
-	// preOrder depth first traversal through BST, tracking curr depth
 	preOrder(cb, curr = this.root, depth = 0) {
-		if (curr) {
+		if (curr !== null) {
 			cb(curr, depth);
 			depth += 1;
 			this.preOrder(cb, curr.left, depth);
@@ -67,7 +65,7 @@ class BST {
 		}
 	}
 
-	// I: none (method called on BST)
+  // I: none (method called on BST)
 	// O: a linked list for each depth/level of the BST
 	// since the linked lists have to be separate, I'll return an array of linked lists
 	// C: none
@@ -75,16 +73,14 @@ class BST {
 	listOfDepths() {
 		const result = [];
 		this.preOrder((curr, depth) => {
-			if (!result[depth]) {
-				result[depth] = new LinkedList();
-			}
+			result[depth] = result[depth] || new LinkedList();
 			result[depth].addToTail(curr.value);
 		});
 		return result;
 	}
 	// time complexity: O(n) (traverse through all values once)
 	// space complexity: O(n) (copy all values from BST into linked lists)
-}
+};
 
 // tests:
 const assertEquals = (actual, expected, testname) => {

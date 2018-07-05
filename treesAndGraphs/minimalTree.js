@@ -12,49 +12,44 @@ class BST {
 
 	insert(value) {
 		const newNode = this.makeNode(value);
-		if (!this.root) {
+		let curr = this.root;
+		if (curr === null) {
 			this.root = newNode;
 			return;
 		}
-
-		let curr = this.root;
-		while (value !== curr.value) {
+		while(curr.value !== value) {
 			if (value < curr.value) {
-				if (!curr.left) {
+				if (curr.left === null) {
 					curr.left = newNode;
 					break;
 				}
 				curr = curr.left;
 			} else if (value > curr.value) {
-				if (!curr.right) {
+				if (curr.right === null) {
 					curr.right = newNode;
 					break;
 				}
 				curr = curr.right;
-			}	
+			}
 		}
 	}
-}
+};
 
-
-
-// I: a sorted array (increasing) of unique integers
-// O: a BST
-// C: BST must have minimal height 
+// I: sorted array with increasing unique int elements
+// O: a BST with minimal depth
+// C: none
 // E: empty arr
 const minimalTree = (arr) => {
 	const result = new BST();
-	// inner recursive fn
-	const findNext = (arr) => {
-		const next = Math.floor((arr.length - 1) / 2);
-		result.insert(arr[next]);
-		const before = arr.slice(0, next);
-		const after = arr.slice(next + 1);
-		before.length ? findNext(before) : null;
-		after.length ? findNext(after) : null;
-	};
-
-	findNext(arr);
+	const addToTree = (arr) => {
+		if (arr.length) {
+			const mid = Math.floor((arr.length - 1) / 2);
+			result.insert(arr[mid]);
+			addToTree(arr.slice(0, mid));
+			addToTree(arr.slice(mid + 1));
+		}
+	}
+	addToTree(arr);
 	return result;
 };
 // time complexity: O(n)? I'm not sure about the time complexity of slice, 
@@ -69,6 +64,7 @@ const assertEquals = (actual, expected, testname) => {
 		console.log(`FAILED ${testname}: expected "${expected}", but got "${actual}"`);
 	}
 };
+
 
 // TODO: write a function that returns the depth of a BST to make testing more efficient;
 const mt0 = minimalTree([2, 5, 6, 8, 9, 15, 17, 20, 23]);
