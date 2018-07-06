@@ -20,13 +20,13 @@ class DirectedGraph {
 		this.nodes[value] = this.nodes[value] || { edges: {} };
 	}
 
-	contains(value) {
-		return !!this.nodes[value];
+	contains(target) {
+		return !!this.nodes[target];
 	}
 
 	addEdge(fromNode, toNode) {
 		if (this.contains(fromNode) && this.contains(toNode)) {
-			this.nodes[fromNode].edges[toNode] = toNode;
+			this.nodes[fromNode].edges[toNode] = true;
 		}
 	}
 
@@ -35,11 +35,8 @@ class DirectedGraph {
 	// C: none
 	// E: assume graph contains all passed in nodes
 	incomingEdges(fromNodes, toNode) {
-		// for each node in the graph
 		for (let node in this.nodes) {
-			// if curr node is not part of the fromNodes list
-			if (fromNodes.indexOf(node) === -1) {
-				// if curr node has an edge to toNode
+			if (!fromNodes.includes(node)) {
 				if (this.nodes[node].edges[toNode]) {
 					return false;
 				}
@@ -49,41 +46,30 @@ class DirectedGraph {
 	}
 	// time complexity: O(n) - time grows with size of fromNodes argument and the number of nodes in the tree
 	// space compelxity: O(1)
-}
+};
 
 // I: a list of projects (in an array) and a list of dependencies (an array of tuples)
 // O: a valid build order or an error if there is none
 // C: none
 // E: if no projects, return empty build order
 const buildOrder = (projects, dependencies) => {
-	// track build status of each project
-	const toBuild = projects;
-	const buildOrder = [];
-	// create a directed graph - each project is a node and each dependency is an edge
 	const projGraph = new DirectedGraph();
 	projects.forEach(project => projGraph.addNode(project));
 	dependencies.forEach(dependency => projGraph.addEdge(dependency[0], dependency[1]));
+
+	const built = [];
+	const toBuild = projects.slice();
 	let i = 0;
-	// repeat until all projects that can be built are built
-	while (i < toBuild.length) {
-		// if the project can be built, add it to buildOrder and remove from toBuild
-		if (projGraph.incomingEdges(buildOrder, toBuild[i])) {
-			buildOrder.push(toBuild[i].toString());
+	while(i < toBuild.length) {
+		if (projGraph.incomingEdges(built, toBuild[i])) {
+			built.push(toBuild[i]).toString();
 			toBuild.splice(i, 1);
-			// reset i to 0 because new projects might now be able to be built
 			i = 0;
 		} else {
-			// increment i if project cannot currently be built
-			i += 1;
+			i++;
 		}
 	}
-	// when the while loop is over no more projects can be built
-	// if any projects did not get built, return an error
-	if (toBuild.length) {
-		return 'no valid build order';
-	}
-	// otherwise the build was successful, return the valid build order
-	return buildOrder;
+	return toBuild.length ? 'no valid build order' : built;
 };
 // time complexity: worst case is O(n^2)? [O(n) + O(n - 1) + O(n - 2) etc.] where n is the number of projects
 // space compelxity: O(n) where n is size of projects array
